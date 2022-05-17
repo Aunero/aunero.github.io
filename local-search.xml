@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</title>
+    <link href="/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/"/>
+    <url>/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/</url>
+    
+    <content type="html"><![CDATA[<h2 id="后端信息"><a href="#后端信息" class="headerlink" title="后端信息"></a>后端信息</h2><p>XrayR后端说明：<a href="https://crackair.gitbook.io/xrayr-project/">https://crackair.gitbook.io/xrayr-project/</a></p><p>XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本</p><p><a href="https://github.com/Misaka-blog/XrayR">https://github.com/Misaka-blog/XrayR</a></p><h2 id="前端配置"><a href="#前端配置" class="headerlink" title="前端配置"></a>前端配置</h2><p>节点地址：</p><figure class="highlight coq"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs coq">IP;监听端口;alterId;(tcp或ws);(tls或不填);path=/xxx|<span class="hljs-type">host</span>=xxxx.com|<span class="hljs-type">server</span>=xxx.com|<span class="hljs-type">outside_port</span>=xxx<br></code></pre></td></tr></table></figure><p>类型：V2Ray</p><h2 id="后端配置"><a href="#后端配置" class="headerlink" title="后端配置"></a>后端配置</h2><ul><li>安装后端脚本：</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N https://raw.githubusercontents.com/Misaka-blog/XrayR-script/master/install.sh &amp;&amp; bash install.sh<br></code></pre></td></tr></table></figure><ul><li>时间同步 (VMess协议对时间同步有要求, 如果用VLESS可以跳过)</li></ul><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install -y ntp<br>systemctl enable ntpd<br>ntpdate -q 0.rhel.pool.ntp.org<br>systemctl restart ntpd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改时区:</span><br>tzselect<br>TZ=&#x27;Asia/Shanghai&#x27;;export TZ<br></code></pre></td></tr></table></figure><ul><li>配置文件 &#x2F;etc&#x2F;XrayR&#x2F;config.yml, 以下为部分修改项</li></ul><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Nodes:</span><br>  <span class="hljs-bullet">-</span><br>    <span class="hljs-attr">PanelType:</span> <span class="hljs-string">&quot;SSpanel&quot;</span> <span class="hljs-comment"># 面板类型: SSpanel, V2board, PMpanel, Proxypanel</span><br>    <span class="hljs-attr">ApiConfig:</span><br>      <span class="hljs-attr">ApiHost:</span> <span class="hljs-string">&quot;https://xxx.com&quot;</span>  <span class="hljs-comment">#api地址 机场地址</span><br>      <span class="hljs-attr">ApiKey:</span> <span class="hljs-string">&quot;123123&quot;</span><span class="hljs-comment">#apikey 在你网站的config里配置过的</span><br>      <span class="hljs-attr">NodeID:</span> <span class="hljs-number">15</span><span class="hljs-comment">#节点id</span><br>      <span class="hljs-attr">EnableVless:</span> <span class="hljs-literal">true</span> <span class="hljs-comment"># Enable Vless for V2ray Type vless协议比较快</span><br>    <span class="hljs-attr">ControllerConfig:</span><br>      <span class="hljs-attr">ListenIP:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-comment"># IP address you want to listen 监听ip, 反代需要填</span><br>      <span class="hljs-attr">CertConfig:</span><br>        <span class="hljs-attr">CertMode:</span> <span class="hljs-string">none</span> <span class="hljs-comment">#反代直接关闭 交给后面的脚本申请证书</span><br></code></pre></td></tr></table></figure><h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">输出当前配置文件内容</span><br>xrayr config<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">启动xrayr</span><br>xrayr start<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">指令向导</span><br>xrayr<br></code></pre></td></tr></table></figure><h2 id="BBR加速"><a href="#BBR加速" class="headerlink" title="BBR加速"></a>BBR加速</h2><p>centos bbr</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N --no-check-certificate &quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh<br></code></pre></td></tr></table></figure><p>或者</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">功能比较强大</span><br>bash &lt;(curl -Lso- https://git.io/kernel.sh)<br></code></pre></td></tr></table></figure><h2 id="配置反代"><a href="#配置反代" class="headerlink" title="配置反代"></a>配置反代</h2><p>能够降低封的概率, 推荐使用</p><p>一键脚本, 运行后选18就行了, 按照提示操作即可, 脚本跑完会给出前端节点配置信息, 需要去节点配置改一下</p><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">bash &lt;(curl -sL https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/AuthurNero/</span>soga_nginx<span class="hljs-regexp">/xrayr/</span>xrayr-nginx.sh)<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>VPN技术</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>sspanel</tag>
+      
+      <tag>v2ray</tag>
+      
+      <tag>XrayR</tag>
+      
+      <tag>nginx</tag>
+      
+      <tag>反向代理</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Linux自动重启配置教程</title>
     <link href="/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/"/>
     <url>/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/</url>

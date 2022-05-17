@@ -16,24 +16,25 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="12345678910111213141516171819202122232425262728293031323334ln -sf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime#将时区改成中国crontab -e 30 4 * * * &#x2F;sbin&#x2F;reboot          # ( 0 1 * * *表示每天凌晨4.30重启.)0 1 * *">
+    <meta name="description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;Misaka-blog&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux自动重启配置教程">
-<meta property="og:url" content="https://blog.aunero.ga/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:title" content="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
+<meta property="og:url" content="https://blog.aunero.ga/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334ln -sf &#x2F;usr&#x2F;share&#x2F;zoneinfo&#x2F;Asia&#x2F;Shanghai &#x2F;etc&#x2F;localtime#将时区改成中国crontab -e 30 4 * * * &#x2F;sbin&#x2F;reboot          # ( 0 1 * * *表示每天凌晨4.30重启.)0 1 * *">
+<meta property="og:description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;Misaka-blog&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.c">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog.aunero.ga/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/image-20220516155228037-16526875567211.png">
-<meta property="article:published_time" content="2022-05-16T06:52:10.000Z">
-<meta property="article:modified_time" content="2022-05-16T10:24:02.950Z">
+<meta property="article:published_time" content="2022-05-17T06:06:52.000Z">
+<meta property="article:modified_time" content="2022-05-17T06:28:10.993Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="cron表达式">
+<meta property="article:tag" content="sspanel">
+<meta property="article:tag" content="v2ray">
+<meta property="article:tag" content="XrayR">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="反向代理">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://blog.aunero.ga/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/image-20220516155228037-16526875567211.png">
   
   
-  <title>Linux自动重启配置教程 - Aunero&#39;s Blog</title>
+  <title>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -179,7 +180,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Linux自动重启配置教程">
+            <span class="h2" id="subtitle" title="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
               
             </span>
 
@@ -189,8 +190,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-05-16 14:52" pubdate>
-        2022年5月16日 下午
+      <time datetime="2022-05-17 14:06" pubdate>
+        2022年5月17日 下午
       </time>
     </span>
   
@@ -200,7 +201,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      574 字
+      1.4k 字
     </span>
   
 
@@ -209,7 +210,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5 分钟
+      12 分钟
     </span>
   
 
@@ -238,12 +239,44 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Linux自动重启配置教程</h1>
+            <h1 style="display: none">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</h1>
             
             <div class="markdown-body">
-              <figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br><span class="hljs-meta prompt_">#</span><span class="language-bash">将时区改成中国</span><br><br>crontab -e <br><br>30 4 * * * /sbin/reboot          <br><span class="hljs-meta prompt_"># </span><span class="language-bash">( 0 1 * * *表示每天凌晨4.30重启.)</span><br><br>0 1 * * 1 /sbin/reboot          <br><span class="hljs-meta prompt_"> # </span><span class="language-bash">(0 1 * * 1表示每周一凌晨一点重启</span><br><br>30 2 * * * /home/bin/oraclebackup.sh   <br><span class="hljs-meta prompt_">#</span><span class="language-bash">（备份数据库和站点目录）</span><br><br>30 3 * * * /home/bin/cmsbackup.sh     <br><span class="hljs-meta prompt_">#</span><span class="language-bash">（备份数据库和站点目录）</span><br><br>crontab -l <br><span class="hljs-meta prompt_">#</span><span class="language-bash">查看目前已有的定时任务</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">重启cron生效</span><br>service crond restart <br><br>/etc/init.d/crond start #启动<br>/etc/init.d/crond stop #关闭<br>/etc/init.d/crond restart #重启<br><span class="hljs-meta prompt_"># </span><span class="language-bash">有的系统可能init.d目录下没有crond，只有cron，其实也一样，只不过把crond换为cron：</span><br>/etc/init.d/cron start  #启动<br>/etc/init.d/cron stop #关闭<br>/etc/init.d/cron restart #重启<br><br>who -b #查看最后一次系统启动的时间。<br><br>who -r #查看当前系统运行时间<br></code></pre></td></tr></table></figure>
+              <h2 id="后端信息"><a href="#后端信息" class="headerlink" title="后端信息"></a>后端信息</h2><p>XrayR后端说明：<a target="_blank" rel="noopener" href="https://crackair.gitbook.io/xrayr-project/">https://crackair.gitbook.io/xrayr-project/</a></p>
+<p>XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Misaka-blog/XrayR">https://github.com/Misaka-blog/XrayR</a></p>
+<h2 id="前端配置"><a href="#前端配置" class="headerlink" title="前端配置"></a>前端配置</h2><p>节点地址：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs coq">IP;监听端口;alterId;(tcp或ws);(tls或不填);path=/xxx|<span class="hljs-type">host</span>=xxxx.com|<span class="hljs-type">server</span>=xxx.com|<span class="hljs-type">outside_port</span>=xxx<br></code></pre></td></tr></table></figure>
 
-<img src="/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/image-20220516155228037-16526875567211.png" srcset="/img/loading.gif" lazyload class="" title="image-20220516155228037">
+<p>类型：V2Ray</p>
+<h2 id="后端配置"><a href="#后端配置" class="headerlink" title="后端配置"></a>后端配置</h2><ul>
+<li>安装后端脚本：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N https://raw.githubusercontents.com/Misaka-blog/XrayR-script/master/install.sh &amp;&amp; bash install.sh<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>时间同步 (VMess协议对时间同步有要求, 如果用VLESS可以跳过)</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install -y ntp<br>systemctl enable ntpd<br>ntpdate -q 0.rhel.pool.ntp.org<br>systemctl restart ntpd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改时区:</span><br>tzselect<br>TZ=&#x27;Asia/Shanghai&#x27;;export TZ<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>配置文件 &#x2F;etc&#x2F;XrayR&#x2F;config.yml, 以下为部分修改项</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Nodes:</span><br>  <span class="hljs-bullet">-</span><br>    <span class="hljs-attr">PanelType:</span> <span class="hljs-string">&quot;SSpanel&quot;</span> <span class="hljs-comment"># 面板类型: SSpanel, V2board, PMpanel, Proxypanel</span><br>    <span class="hljs-attr">ApiConfig:</span><br>      <span class="hljs-attr">ApiHost:</span> <span class="hljs-string">&quot;https://xxx.com&quot;</span>  	<span class="hljs-comment">#api地址 机场地址</span><br>      <span class="hljs-attr">ApiKey:</span> <span class="hljs-string">&quot;123123&quot;</span>				<span class="hljs-comment">#apikey 在你网站的config里配置过的</span><br>      <span class="hljs-attr">NodeID:</span> <span class="hljs-number">15</span>					<span class="hljs-comment">#节点id</span><br>      <span class="hljs-attr">EnableVless:</span> <span class="hljs-literal">true</span> 			<span class="hljs-comment"># Enable Vless for V2ray Type vless协议比较快</span><br>    <span class="hljs-attr">ControllerConfig:</span><br>      <span class="hljs-attr">ListenIP:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-comment"># IP address you want to listen 监听ip, 反代需要填</span><br>      <span class="hljs-attr">CertConfig:</span><br>        <span class="hljs-attr">CertMode:</span> <span class="hljs-string">none</span> <span class="hljs-comment">#反代直接关闭 交给后面的脚本申请证书</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">输出当前配置文件内容</span><br>xrayr config<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">启动xrayr</span><br>xrayr start<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">指令向导</span><br>xrayr<br></code></pre></td></tr></table></figure>
+
+<h2 id="BBR加速"><a href="#BBR加速" class="headerlink" title="BBR加速"></a>BBR加速</h2><p>centos bbr</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N --no-check-certificate &quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh<br></code></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">功能比较强大</span><br>bash &lt;(curl -Lso- https://git.io/kernel.sh)<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置反代"><a href="#配置反代" class="headerlink" title="配置反代"></a>配置反代</h2><p>能够降低封的概率, 推荐使用</p>
+<p>一键脚本, 运行后选18就行了, 按照提示操作即可, 脚本跑完会给出前端节点配置信息, 需要去节点配置改一下</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">bash &lt;(curl -sL https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/AuthurNero/</span>soga_nginx<span class="hljs-regexp">/xrayr/</span>xrayr-nginx.sh)<br></code></pre></td></tr></table></figure>
+
+
 
 
             </div>
@@ -254,7 +287,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Linux/">Linux</a>
+                      <a class="hover-with-bg" href="/categories/VPN%E6%8A%80%E6%9C%AF/">VPN技术</a>
                     
                   </div>
                 
@@ -262,9 +295,15 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                      <a class="hover-with-bg" href="/tags/sspanel/">sspanel</a>
                     
-                      <a class="hover-with-bg" href="/tags/cron%E8%A1%A8%E8%BE%BE%E5%BC%8F/">cron表达式</a>
+                      <a class="hover-with-bg" href="/tags/v2ray/">v2ray</a>
+                    
+                      <a class="hover-with-bg" href="/tags/XrayR/">XrayR</a>
+                    
+                      <a class="hover-with-bg" href="/tags/nginx/">nginx</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">反向代理</a>
                     
                   </div>
                 
@@ -281,15 +320,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2022/05/16/Linux%E8%87%AA%E5%8A%A8%E9%87%8D%E5%90%AF%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/">
+                        <span class="hidden-mobile">Linux自动重启配置教程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
@@ -311,7 +350,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'b6fe3b71502483e0fa0469aebe3a52f0'
+            id: '2a5405fc371fff04b167e7689827aaac'
           }
         )
         var gitalk = new Gitalk(options);
