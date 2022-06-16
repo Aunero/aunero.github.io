@@ -16,28 +16,27 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+    <meta name="description" content="前言 V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。 教程 1.打开V2rayN面板，找到设置–路由设置  2.添加代理&#x2F;直连&#x2F;组织的域名  配置规则:  建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。 (添加完 geoip">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-<meta property="og:url" content="https://blog.aunero.ga/2022/06/10/docker%E5%AE%B9%E5%99%A8%E6%97%B6%E9%97%B4%E4%B8%8D%E5%90%8C%E6%AD%A5%E5%AF%BC%E8%87%B4%E5%9C%A8java%E5%BA%94%E7%94%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E6%AD%A3%E7%A1%AE%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="Windows V2rayN直连or代理规则配置教程">
+<meta property="og:url" content="https://blog.aunero.ga/2022/06/16/Windows-V2rayN%E7%9B%B4%E8%BF%9Eor%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+<meta property="og:description" content="前言 V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。 教程 1.打开V2rayN面板，找到设置–路由设置  2.添加代理&#x2F;直连&#x2F;组织的域名  配置规则:  建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。 (添加完 geoip">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
-<meta property="article:published_time" content="2022-06-10T02:42:36.000Z">
-<meta property="article:modified_time" content="2022-06-10T08:37:49.110Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
+<meta property="article:published_time" content="2022-06-16T02:35:49.000Z">
+<meta property="article:modified_time" content="2022-06-16T03:12:23.384Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="docker">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="V2rayN">
+<meta property="article:tag" content="V2ray">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>docker容器时间不同步导致在java应用中获取的时间不正确问题 - Aunero&#39;s Blog</title>
+  <title>Windows V2rayN直连or代理规则配置教程 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="docker容器时间不同步导致在java应用中获取的时间不正确问题"></span>
+            <span id="subtitle" data-typed-text="Windows V2rayN直连or代理规则配置教程"></span>
           
         </div>
 
@@ -223,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-10 10:42" pubdate>
-          2022年6月10日 上午
+        <time datetime="2022-06-16 10:35" pubdate>
+          2022年6月16日 上午
         </time>
       </span>
     
@@ -236,7 +235,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.1k 字
+          803 字
         
       </span>
     
@@ -248,7 +247,7 @@
         
         
           <!-- compatible with older versions-->
-          10 分钟
+          7 分钟
         
       </span>
     
@@ -286,45 +285,46 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">docker容器时间不同步导致在java应用中获取的时间不正确问题</h1>
+            <h1 style="display: none">Windows V2rayN直连or代理规则配置教程</h1>
             
             <div class="markdown-body">
               
-              <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
-<h3 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h3><h4 id="1、首选需要确保宿主机的时区和时间的准确"><a href="#1、首选需要确保宿主机的时区和时间的准确" class="headerlink" title="1、首选需要确保宿主机的时区和时间的准确"></a>1、首选需要确保宿主机的时区和时间的准确</h4><p>现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）</p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/image-20220610112000077.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区"><a href="#2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区" class="headerlink" title="2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区"></a>2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区</h4><h5 id="date命令："><a href="#date命令：" class="headerlink" title="date命令："></a>date命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">date                	#查看当前时间，结果如下：2017年 01月 06日 星期五 13:02:55 CST<br>date -s 14:03:35		#设置当前时间，结果如下：2017年 01月 06日 星期五 14:03:35 CST<br>date -s 2017-01-08    	#设置当前日期，结果如下：2017年 01月 08日 星期五 00:00:00  CST<br></code></pre></td></tr></table></figure>
-
-<h5 id="ntpdate命令："><a href="#ntpdate命令：" class="headerlink" title="ntpdate命令："></a>ntpdate命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ntpdate -u 210.72.145.44   #网络时间同步命令<br></code></pre></td></tr></table></figure>
-
+              <h2 id="前言">前言</h2>
+<p>V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。</p>
+<h2 id="教程">教程</h2>
+<h4 id="1-打开V2rayN面板，找到设置–路由设置">1.打开V2rayN面板，找到设置–路由设置</h4>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161041896.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="2-添加代理-直连-组织的域名">2.添加代理/直连/组织的域名</h4>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161046462.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="配置规则">配置规则:</h4>
 <blockquote>
-<p>注意：若不加上-u参数， 会出现以下提示：no server suitable for synchronization found</p>
-<p>-u：从man ntpdate中可以看出-u参数可以越过防火墙与主机同步；</p>
-<p>210.72.145.44：中国国家授时中心的官方服务器。</p>
+<p><strong>建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。</strong><br>
+<strong>(添加完 geoip:cn 和 geosite:cn 以后基本上所有中国大陆的网站都会直连)</strong><br>
+<strong>geosite:category-ads：包含了常见的广告域名。</strong><br>
+<strong>geosite:category-ads-all：包含了常见的广告域名，以及广告提供商的域名。</strong><br>
+<strong>geoip:apple：包含了 Apple 旗下绝大部分域名。</strong><br>
+<strong>geoip:google：包含了 Google 旗下绝大部分域名。</strong><br>
+<strong>geoip:microsoft：包含了 Microsoft 旗下绝大部分域名。</strong><br>
+<strong>geoip:facebook：包含了 Facebook 旗下绝大部分域名。</strong><br>
+<strong>geoip:twitter：包含了 Twitter 旗下绝大部分域名。</strong><br>
+<strong>geoip:telegram：包含了 Telegram 旗下绝大部分域名。</strong></p>
 </blockquote>
-<h5 id="ntp常用服务器："><a href="#ntp常用服务器：" class="headerlink" title="ntp常用服务器："></a>ntp常用服务器：</h5><p>中国国家授时中心：210.72.145.44</p>
-<p>NTP服务器(上海) ：ntp.api.bz</p>
-<p>经测试中国国家授时中心与NTP上海服务器可以正常同步时间，注意需要加上-u参数！</p>
-<h5 id="时区修改："><a href="#时区修改：" class="headerlink" title="时区修改："></a>时区修改：</h5><p>使用tzselect， 选择到China&#x2F;Shanghai即可</p>
-<p>若显示未安装tzselect，可以安装一下tzdata</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install tzdata 	#centos<br>apt-get install tzdata 	#ubuntu<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。"><a href="#3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。" class="headerlink" title="3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。"></a>3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp /usr/share/zoneinfo 容器名称:/usr/share/<br></code></pre></td></tr></table></figure>
-
-<h4 id="2、进入到容器中"><a href="#2、进入到容器中" class="headerlink" title="2、进入到容器中"></a>2、进入到容器中</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it 容器名称 /bin/bash<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、创建软连接，修改时区。"><a href="#3、创建软连接，修改时区。" class="headerlink" title="3、创建软连接，修改时区。"></a>3、创建软连接，修改时区。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br>echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone<br></code></pre></td></tr></table></figure>
-
-<h4 id="4、查看时间，进行测试。"><a href="#4、查看时间，进行测试。" class="headerlink" title="4、查看时间，进行测试。"></a>4、查看时间，进行测试。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -R<br></code></pre></td></tr></table></figure>
-
-
-
-
-
-<p>参考文章:</p>
-<p><a target="_blank" rel="noopener" href="https://www.linuxprobe.com/linux-time.html">如何调整Linux系统为正确时区 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.csdn.net/tags/MtzaIgwsOTY2ODQtYmxvZwO0O0OO0O0O.html">linux中同步时间的命令是什么 - CSDN</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tiny_du/article/details/124024562">修改docker的时间_在路上的阿帅的博客-CSDN博客_docker 修改时间</a></p>
+<ul>
+<li>如果你使用的局域网屏蔽了一些你想上的网站，你也可以使用这个功能解除限制，当然需要把想上的网站配置进代理配置中</li>
+</ul>
+<h4 id="3-如果你启用了路由高级功能，想要配置不同模式下的代理规则，也是可以的，如果你不使用高级功能，可以跳过这一步">3.如果你启用了路由高级功能，想要配置不同模式下的代理规则，也是可以的，如果你不使用高级功能，可以跳过这一步</h4>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161054968.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>每一项代表一个规则集，你可以右击新建规则集去定制化，双击规则集配置规则:</strong></p>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161056889.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>proxy代表代理，direct代表直连，block代表阻止</strong></p>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161057110.png" srcset="/img/loading.gif" lazyload alt="因为公司内网屏蔽额这些站点（恼），我就让这些站点走了代理"></p>
+<p><strong>配置完只需要一路确定，然后在托盘菜单的路由中选择自己定制化的规则集即可</strong></p>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161101779.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="4-检查是否生效">4.检查是否生效</h4>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161102614.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><strong>查看日志，会发现有些域名代理了，有些域名屏蔽了，有些域名直连了，那就是设置成功了。</strong></p>
+<p>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://hasefukashi.in/v2rayrule/">Windows V2rayN 如何设置 直连or代理 规则？ - Hase測評 (hasefukashi.in)</a></p>
 
               
             </div>
@@ -342,7 +342,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Java%E5%BC%80%E5%8F%91/" class="category-chain-item">Java开发</a>
+  <a href="/categories/VPN%E6%8A%80%E6%9C%AF/" class="category-chain-item">VPN技术</a>
   
   
 
@@ -357,11 +357,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Linux/">#Linux</a>
+        <a href="/tags/V2rayN/">#V2rayN</a>
       
-        <a href="/tags/docker/">#docker</a>
-      
-        <a href="/tags/Java/">#Java</a>
+        <a href="/tags/V2ray/">#V2ray</a>
       
     </div>
   
@@ -373,8 +371,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>docker容器时间不同步导致在java应用中获取的时间不正确问题</div>
-      <div>https://blog.aunero.ga/2022/06/10/docker容器时间不同步导致在java应用中获取的时间不正确问题/</div>
+      <div>Windows V2rayN直连or代理规则配置教程</div>
+      <div>https://blog.aunero.ga/2022/06/16/Windows-V2rayN直连or代理规则配置教程/</div>
     </div>
     <div class="license-meta">
       
@@ -386,7 +384,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月10日</div>
+          <div>2022年6月16日</div>
         </div>
       
       
@@ -416,18 +414,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/16/Windows-V2rayN%E7%9B%B4%E8%BF%9Eor%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/" title="Windows V2rayN直连or代理规则配置教程">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Windows V2rayN直连or代理规则配置教程</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/" title="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
-                        <span class="hidden-mobile">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</span>
+                      <a href="/2022/06/10/docker%E5%AE%B9%E5%99%A8%E6%97%B6%E9%97%B4%E4%B8%8D%E5%90%8C%E6%AD%A5%E5%AF%BC%E8%87%B4%E5%9C%A8java%E5%BA%94%E7%94%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E6%AD%A3%E7%A1%AE%E9%97%AE%E9%A2%98/" title="docker容器时间不同步导致在java应用中获取的时间不正确问题">
+                        <span class="hidden-mobile">docker容器时间不同步导致在java应用中获取的时间不正确问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -448,7 +440,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '4544e5fa5d56ce20de882cf25ba52738'
+            id: 'ff3de3a827c0084b1ab270b85ba0843c'
           }
         )
         var gitalk = new Gitalk(options);
