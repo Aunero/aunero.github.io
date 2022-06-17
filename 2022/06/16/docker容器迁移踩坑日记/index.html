@@ -16,27 +16,27 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。 教程 1.打开V2rayN面板，找到设置–路由设置  2.添加代理&#x2F;直连&#x2F;组织的域名  配置规则:  建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。 (添加完 geoip">
+    <meta name="description" content="前言被领导要求部署一个和测试环境一样的演示环境，并且数据库也要同步过去，服务器上的各种服务都是docker部署的，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows V2rayN直连or代理规则配置教程">
-<meta property="og:url" content="https://blog.aunero.ga/2022/06/16/Windows-V2rayN%E7%9B%B4%E8%BF%9Eor%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:title" content="docker容器迁移踩坑日记">
+<meta property="og:url" content="https://blog.aunero.ga/2022/06/16/docker%E5%AE%B9%E5%99%A8%E8%BF%81%E7%A7%BB%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="前言 V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。 教程 1.打开V2rayN面板，找到设置–路由设置  2.添加代理&#x2F;直连&#x2F;组织的域名  配置规则:  建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。 (添加完 geoip">
+<meta property="og:description" content="前言被领导要求部署一个和测试环境一样的演示环境，并且数据库也要同步过去，服务器上的各种服务都是docker部署的，">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
-<meta property="article:published_time" content="2022-06-16T02:35:49.000Z">
-<meta property="article:modified_time" content="2022-06-16T05:57:44.396Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206162111946.png">
+<meta property="article:published_time" content="2022-06-16T13:12:15.000Z">
+<meta property="article:modified_time" content="2022-06-16T13:20:10.237Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="v2ray">
-<meta property="article:tag" content="v2rayN">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206162111946.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Windows V2rayN直连or代理规则配置教程 - Aunero&#39;s Blog</title>
+  <title>docker容器迁移踩坑日记 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Windows V2rayN直连or代理规则配置教程"></span>
+            <span id="subtitle" data-typed-text="docker容器迁移踩坑日记"></span>
           
         </div>
 
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-16 10:35" pubdate>
-          2022年6月16日 上午
+        <time datetime="2022-06-16 21:12" pubdate>
+          2022年6月16日 晚上
         </time>
       </span>
     
@@ -235,7 +235,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          803 字
+          57 字
         
       </span>
     
@@ -247,7 +247,7 @@
         
         
           <!-- compatible with older versions-->
-          7 分钟
+          1 分钟
         
       </span>
     
@@ -285,46 +285,11 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Windows V2rayN直连or代理规则配置教程</h1>
+            <h1 style="display: none">docker容器迁移踩坑日记</h1>
             
             <div class="markdown-body">
               
-              <h2 id="前言">前言</h2>
-<p>V2rayN 在更新以后移除了 PAC 规则模式，很多人被迫要么使用全局代理要么关闭代理，但其实规则模式只是通过另外一种方式呈现在了 V2rayN 里。</p>
-<h2 id="教程">教程</h2>
-<h3 id="1-打开V2rayN面板，找到设置–路由设置">1.打开V2rayN面板，找到设置–路由设置</h3>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161041896.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="2-添加代理-直连-组织的域名">2.添加代理/直连/组织的域名</h3>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161046462.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h4 id="配置规则">配置规则:</h4>
-<blockquote>
-<p><strong>建议先添加 geoip:cn 和 geosite:cn，然后再以 domain:xxx.com 的形式添加特别网站。</strong><br>
-<strong>(添加完 geoip:cn 和 geosite:cn 以后基本上所有中国大陆的网站都会直连)</strong><br>
-<strong>geosite:category-ads：包含了常见的广告域名。</strong><br>
-<strong>geosite:category-ads-all：包含了常见的广告域名，以及广告提供商的域名。</strong><br>
-<strong>geoip:apple：包含了 Apple 旗下绝大部分域名。</strong><br>
-<strong>geoip:google：包含了 Google 旗下绝大部分域名。</strong><br>
-<strong>geoip:microsoft：包含了 Microsoft 旗下绝大部分域名。</strong><br>
-<strong>geoip:facebook：包含了 Facebook 旗下绝大部分域名。</strong><br>
-<strong>geoip:twitter：包含了 Twitter 旗下绝大部分域名。</strong><br>
-<strong>geoip:telegram：包含了 Telegram 旗下绝大部分域名。</strong></p>
-</blockquote>
-<ul>
-<li>如果你使用的局域网屏蔽了一些你想上的网站，你也可以使用这个功能解除限制，当然需要把想上的网站配置进代理配置中</li>
-</ul>
-<h3 id="3-如果你启用了路由高级功能，想要配置不同模式下的代理规则，也是可以的，如果你不使用高级功能，可以跳过这一步">3.如果你启用了路由高级功能，想要配置不同模式下的代理规则，也是可以的，如果你不使用高级功能，可以跳过这一步</h3>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161054968.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><strong>每一项代表一个规则集，你可以右击新建规则集去定制化，双击规则集配置规则:</strong></p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161056889.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><strong>proxy代表代理，direct代表直连，block代表阻止</strong></p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161057110.png" srcset="/img/loading.gif" lazyload alt="因为公司内网屏蔽额这些站点（恼），我就让这些站点走了代理"></p>
-<p><strong>配置完只需要一路确定，然后在托盘菜单的路由中选择自己定制化的规则集即可</strong></p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161101779.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h3 id="4-检查是否生效">4.检查是否生效</h3>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206161102614.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<p><strong>查看日志，会发现有些域名代理了，有些域名屏蔽了，有些域名直连了，那就是设置成功了。</strong></p>
-<p>参考文章：</p>
-<p><a target="_blank" rel="noopener" href="https://hasefukashi.in/v2rayrule/">Windows V2rayN 如何设置 直连or代理 规则？ - Hase測評 (hasefukashi.in)</a></p>
+              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>被领导要求部署一个和测试环境一样的演示环境，并且数据库也要同步过去，服务器上的各种服务都是docker部署的，</p>
 
               
             </div>
@@ -342,7 +307,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/VPN%E6%8A%80%E6%9C%AF/" class="category-chain-item">VPN技术</a>
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
   
   
 
@@ -357,9 +322,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/v2ray/">#v2ray</a>
+        <a href="/tags/Linux/">#Linux</a>
       
-        <a href="/tags/v2rayN/">#v2rayN</a>
+        <a href="/tags/docker/">#docker</a>
       
     </div>
   
@@ -371,8 +336,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Windows V2rayN直连or代理规则配置教程</div>
-      <div>https://blog.aunero.ga/2022/06/16/Windows-V2rayN直连or代理规则配置教程/</div>
+      <div>docker容器迁移踩坑日记</div>
+      <div>https://blog.aunero.ga/2022/06/16/docker容器迁移踩坑日记/</div>
     </div>
     <div class="license-meta">
       
@@ -414,18 +379,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/16/docker%E5%AE%B9%E5%99%A8%E8%BF%81%E7%A7%BB%E8%B8%A9%E5%9D%91%E6%97%A5%E8%AE%B0/" title="docker容器迁移踩坑日记">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">docker容器迁移踩坑日记</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/10/docker%E5%AE%B9%E5%99%A8%E6%97%B6%E9%97%B4%E4%B8%8D%E5%90%8C%E6%AD%A5%E5%AF%BC%E8%87%B4%E5%9C%A8java%E5%BA%94%E7%94%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E6%AD%A3%E7%A1%AE%E9%97%AE%E9%A2%98/" title="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-                        <span class="hidden-mobile">docker容器时间不同步导致在java应用中获取的时间不正确问题</span>
+                      <a href="/2022/06/16/Windows-V2rayN%E7%9B%B4%E8%BF%9Eor%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/" title="Windows V2rayN直连or代理规则配置教程">
+                        <span class="hidden-mobile">Windows V2rayN直连or代理规则配置教程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -446,7 +405,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'ff3de3a827c0084b1ab270b85ba0843c'
+            id: 'f14dc39eb0e017d7fb718b57be69b74c'
           }
         )
         var gitalk = new Gitalk(options);
