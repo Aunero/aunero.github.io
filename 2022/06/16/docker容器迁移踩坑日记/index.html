@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206162111946.png">
 <meta property="article:published_time" content="2022-06-16T13:12:15.000Z">
-<meta property="article:modified_time" content="2022-06-17T03:56:34.990Z">
+<meta property="article:modified_time" content="2022-06-17T06:28:50.636Z">
 <meta property="article:author" content="AuthurNero">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="docker">
@@ -331,22 +331,22 @@
 <li>如果迁移后的容器的配置也想要一样的话，也可以把docker容器迁移过来，迁移的步骤和前三步一致，这里不再赘述</li>
 </ul>
 <h4 id="4-1-docker容器的导出">4.1 docker容器的导出</h4>
-<p>命令：<br>
-docker export [options] container<br>
-使用命令：<br>
-docker export -o /home/econtainer.tar 0a64dafa5db9</p>
-<p>解释：<br>
--o表示输出到文件；</p>
+<p>命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker <span class="hljs-built_in">export</span> [options] container<br></code></pre></td></tr></table></figure>
+<p>使用命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker <span class="hljs-built_in">export</span> -o /home/econtainer.tar 0a64dafa5db9<br></code></pre></td></tr></table></figure>
+<p>解释：</p>
+<p>​	-o表示输出到文件；</p>
 <p>​	/home/econtainer.tar指定导出的位置路径；</p>
 <p>​	0a64dafa5db9为容器id;</p>
 <h4 id="4-2-docker容器的导入">4.2 docker容器的导入</h4>
 <p>首先需要使用xftp或其他工具将上面的.tar文件上传到需要导入镜像的服务器中。</p>
-<p>命令：<br>
-docker import [options] file|url| -[repository[:tag]]<br>
-使用命令：<br>
-docker  import  econtainer.tar  epower:latest</p>
-<p>解释：<br>
-econtainer.tar表示导入的容器；</p>
+<p>命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker import [options] file|url| -[repository[:tag]]<br></code></pre></td></tr></table></figure>
+<p>使用命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">docker import econtainer.tar epower:latest<br></code></pre></td></tr></table></figure>
+<p>解释：</p>
+<p>​	econtainer.tar表示导入的容器；</p>
 <p>​	epower:latest表示给导入后的镜像进行重命名，latest表示给导入的镜像打tag;</p>
 <p>​	使用docker images命令可以查看是否导入成功，导入成功就可以根据镜像运行容器；</p>
 
