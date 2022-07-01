@@ -16,27 +16,28 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1.打开WSA，然后打开命令行，用adb连接安卓子系统 若找不到adb命令，需要把adb配置到环境变量，或者直接在adb.exe所在目录下执行  1adb connect 127.0.0.1:58526  2.设置全局代理，ip地址为本机内网ip，端口为http代理端口 ip地址可通过ipconfig获取  1adb shell settings put global http_proxy ip地">
+    <meta name="description" content="前言需求是这样的，需要在页面导出列表表格时同时导出每项的详情数据，而且详情表格并不是一个常规的二维表格，就像图中这样的效果，所以要解决的最主要两个问题就是：多sheet实现、异形表格模板填充。  教程1.引入EasyExcel，为了减少代码量，不重复造轮子12345&lt;dependency&gt;    &lt;groupId&gt;com.alibaba&lt;&#x2F;groupId&gt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows11安卓子系统添加代理教程">
-<meta property="og:url" content="https://blog.aunero.ga/2022/06/29/win11%E5%AE%89%E5%8D%93%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:title" content="Java多sheet模板导出表格">
+<meta property="og:url" content="https://blog.aunero.ga/2022/07/01/Java%E5%A4%9Asheet%E6%A8%A1%E6%9D%BF%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC/index.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="1.打开WSA，然后打开命令行，用adb连接安卓子系统 若找不到adb命令，需要把adb配置到环境变量，或者直接在adb.exe所在目录下执行  1adb connect 127.0.0.1:58526  2.设置全局代理，ip地址为本机内网ip，端口为http代理端口 ip地址可通过ipconfig获取  1adb shell settings put global http_proxy ip地">
+<meta property="og:description" content="前言需求是这样的，需要在页面导出列表表格时同时导出每项的详情数据，而且详情表格并不是一个常规的二维表格，就像图中这样的效果，所以要解决的最主要两个问题就是：多sheet实现、异形表格模板填充。  教程1.引入EasyExcel，为了减少代码量，不重复造轮子12345&lt;dependency&gt;    &lt;groupId&gt;com.alibaba&lt;&#x2F;groupId&gt;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206291343296.png">
-<meta property="article:published_time" content="2022-06-29T03:56:36.000Z">
-<meta property="article:modified_time" content="2022-06-29T05:45:13.530Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
+<meta property="article:published_time" content="2022-07-01T08:00:04.000Z">
+<meta property="article:modified_time" content="2022-07-01T09:05:24.930Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="Windows">
-<meta property="article:tag" content="WSA">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="EasyExcel">
+<meta property="article:tag" content="POI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206291343296.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Windows11安卓子系统添加代理教程 - Aunero&#39;s Blog</title>
+  <title>Java多sheet模板导出表格 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +212,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Windows11安卓子系统添加代理教程"></span>
+            <span id="subtitle" data-typed-text="Java多sheet模板导出表格"></span>
           
         </div>
 
@@ -222,8 +223,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-29 11:56" pubdate>
-          2022年6月29日 中午
+        <time datetime="2022-07-01 16:00" pubdate>
+          2022年7月1日 下午
         </time>
       </span>
     
@@ -235,7 +236,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          234 字
+          2.5k 字
         
       </span>
     
@@ -247,7 +248,7 @@
         
         
           <!-- compatible with older versions-->
-          2 分钟
+          22 分钟
         
       </span>
     
@@ -285,23 +286,38 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Windows11安卓子系统添加代理教程</h1>
+            <h1 style="display: none">Java多sheet模板导出表格</h1>
             
             <div class="markdown-body">
               
-              <h4 id="1-打开WSA，然后打开命令行，用adb连接安卓子系统"><a href="#1-打开WSA，然后打开命令行，用adb连接安卓子系统" class="headerlink" title="1.打开WSA，然后打开命令行，用adb连接安卓子系统"></a>1.打开WSA，然后打开命令行，用adb连接安卓子系统</h4><ul>
-<li>若找不到adb命令，需要把adb配置到环境变量，或者直接在adb.exe所在目录下执行</li>
+              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>需求是这样的，需要在页面导出列表表格时同时导出每项的详情数据，而且详情表格并不是一个常规的二维表格，就像图中这样的效果，所以要解决的最主要两个问题就是：多sheet实现、异形表格模板填充。</p>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202207011608673.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="1-引入EasyExcel，为了减少代码量，不重复造轮子"><a href="#1-引入EasyExcel，为了减少代码量，不重复造轮子" class="headerlink" title="1.引入EasyExcel，为了减少代码量，不重复造轮子"></a>1.引入EasyExcel，为了减少代码量，不重复造轮子</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>easyexcel<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-写填充模板"><a href="#2-写填充模板" class="headerlink" title="2.写填充模板"></a>2.写填充模板</h3><ul>
+<li>我导出的表格需要有个汇总表，填充的是集合需要在变量前加点，像这样 {.变量名}</li>
 </ul>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">adb connect <span class="hljs-number">127</span>.<span class="hljs-number">0</span>.<span class="hljs-number">0</span>.<span class="hljs-number">1</span>:<span class="hljs-number">58526</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="2-设置全局代理，ip地址为本机内网ip，端口为http代理端口"><a href="#2-设置全局代理，ip地址为本机内网ip，端口为http代理端口" class="headerlink" title="2.设置全局代理，ip地址为本机内网ip，端口为http代理端口"></a>2.设置全局代理，ip地址为本机内网ip，端口为http代理端口</h4><ul>
-<li>ip地址可通过<code>ipconfig</code>获取</li>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202207011615796.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>这是详情表，模板可以根据你想要的来，填充非对象集合就不需要加点，这里要记住你需要生成多sheet的模板索引，这里位置在第二个，索引就是1，后面编码过程会用到</li>
 </ul>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">adb shell settings put global http_proxy ip地址:端口<br></code></pre></td></tr></table></figure>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202207011615436.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="3-编码"><a href="#3-编码" class="headerlink" title="3.编码"></a>3.编码</h3><p><strong>3.1 生成多sheet名-数据对象键值对</strong></p>
+<ul>
+<li>根据你的业务需求，我们可以提前把模板生成好，再去填充数据，excel中不能出现重复的sheet名，我们要把重命名的sheet名和数据对应上，我们可以创建一个HashMap去存放sheet名和数据对，这是我的代码：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//这是我想要的数据集合</span><br>List&lt;KpiTaskVO&gt; voList = taskList(<span class="hljs-keyword">new</span> <span class="hljs-title class_">KpiTaskSelectDTO</span>(idList));<br><br><span class="hljs-comment">//sheet名-数据对象</span><br>Map&lt;String, KpiTaskVO&gt; sheetMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br><span class="hljs-keyword">for</span> (KpiTaskVO taskVO : voList) &#123;<br>    <span class="hljs-type">String</span> <span class="hljs-variable">sheetName</span> <span class="hljs-operator">=</span> taskVO.getName() + <span class="hljs-string">&quot;--详情&quot;</span>;<br>    <span class="hljs-comment">//put键值对, 同时防止重名</span><br>    putIfContainsKey(sheetMap, sheetName, taskVO);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h4 id="3-检验是否代理成功"><a href="#3-检验是否代理成功" class="headerlink" title="3.检验是否代理成功"></a>3.检验是否代理成功</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cmd">adb shell settings get global http_proxy <br></code></pre></td></tr></table></figure>
+<ul>
+<li>我这里的sheet名是有可能会重复的，所以这里的put自己写了递归去重命名，putIfContainsKey方法如下，遇到重复的sheet直接递归在sheet名后加（1）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">putIfContainsKey</span><span class="hljs-params">(Map sheetMap, String sheetName, Object data)</span> &#123;<br>    <span class="hljs-keyword">if</span>(sheetMap.containsKey(sheetName))&#123;<br>        putIfContainsKey(sheetMap, sheetName + <span class="hljs-string">&quot;(1)&quot;</span>, data);<br>    &#125;<span class="hljs-keyword">else</span> &#123;<br>        sheetMap.put(sheetName, data);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<p><strong>3.2 生成多sheet模板</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//获取模板输入流</span><br><span class="hljs-type">InputStream</span> <span class="hljs-variable">inStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(<span class="hljs-string">&quot;D:\template.xlsx&quot;</span>);<br><span class="hljs-comment">//这里就是模板的sheet索引</span><br><span class="hljs-type">int</span> <span class="hljs-variable">cloneIndex</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;<br><span class="hljs-comment">//通过poi创建表对象</span><br><span class="hljs-type">XSSFWorkbook</span> <span class="hljs-variable">workbook</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">XSSFWorkbook</span>(inputStream);<br><span class="hljs-comment">//遍历复制sheet</span><br><span class="hljs-type">ByteArrayOutputStream</span> <span class="hljs-variable">bos</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayOutputStream</span>();<br><span class="hljs-keyword">for</span> (Map.Entry&lt;String, KpiTaskVO&gt; entry : sheetMap.entrySet()) &#123;<br>    <span class="hljs-comment">//给复制的sheet命名,这里取的就是map中的key</span><br>	workbook.cloneSheet(cloneIndex, entry.getKey());<br>&#125;<br><br><span class="hljs-comment">//移除原始模板sheet</span><br>workbook.removeSheetAt(cloneIndex);<br><span class="hljs-comment">//写到流</span><br>workbook.write(bos);<br></code></pre></td></tr></table></figure>
 
+<p><strong>3.3 通过EasyExcel导出表格</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//输出文件名</span><br><span class="hljs-type">String</span> <span class="hljs-variable">filename</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;D:\out.xlsx&quot;</span>;<br><span class="hljs-comment">//创建模板输入流</span><br><span class="hljs-type">ByteArrayInputStream</span> <span class="hljs-variable">is</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ByteArrayInputStream</span>(bos.toByteArray());<br><span class="hljs-comment">//构造表格</span><br><span class="hljs-type">ExcelWriter</span> <span class="hljs-variable">excelWriter</span> <span class="hljs-operator">=</span> EasyExcel.write(filename).withTemplate(is).build();<br><span class="hljs-comment">//填充配置, 这里的意义是给模板中的集合数据添加新行, 保证导出不会错乱</span><br><span class="hljs-type">FillConfig</span> <span class="hljs-variable">fillConfig</span> <span class="hljs-operator">=</span> FillConfig.builder().forceNewRow(Boolean.TRUE).build();<br><br><span class="hljs-comment">//填充汇总数据</span><br><span class="hljs-type">WriteSheet</span> <span class="hljs-variable">writeSheet</span> <span class="hljs-operator">=</span> EasyExcel.writerSheet(<span class="hljs-string">&quot;汇总&quot;</span>).build();<br>excelWriter.fill(voList, fillConfig, writeSheet);<br><span class="hljs-comment">//遍历填充详情数据</span><br><span class="hljs-keyword">for</span> (Map.Entry&lt;String, KpiTaskVO&gt; entry : sheetMap.entrySet()) &#123;<br>	<span class="hljs-comment">//获取sheet</span><br>    <span class="hljs-type">WriteSheet</span> <span class="hljs-variable">writeSheet</span> <span class="hljs-operator">=</span> EasyExcel.writerSheet(entry.getKey()).build();<br>    <span class="hljs-comment">//填充对象数据 直接放对象即可</span><br>    excelWriter.fill(entry.getValue(), fillConfig, writeSheet);<br>    <span class="hljs-comment">//填充集合数据 需要放集合</span><br>	List&lt;TaskDetail&gt; detailList = entry.getValue().getDetailList();<br>    excelWriter.fill(list, fillConfig, writeSheet);<br>&#125;<br><span class="hljs-comment">//关流</span><br>excelWriter.finish();<br></code></pre></td></tr></table></figure>
 
 
               
@@ -320,7 +336,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Windows11/" class="category-chain-item">Windows11</a>
+  <a href="/categories/Java%E5%BC%80%E5%8F%91/" class="category-chain-item">Java开发</a>
   
   
 
@@ -335,9 +351,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Windows/">#Windows</a>
+        <a href="/tags/Java/">#Java</a>
       
-        <a href="/tags/WSA/">#WSA</a>
+        <a href="/tags/EasyExcel/">#EasyExcel</a>
+      
+        <a href="/tags/POI/">#POI</a>
       
     </div>
   
@@ -349,8 +367,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Windows11安卓子系统添加代理教程</div>
-      <div>https://blog.aunero.ga/2022/06/29/win11安卓子系统添加代理教程/</div>
+      <div>Java多sheet模板导出表格</div>
+      <div>https://blog.aunero.ga/2022/07/01/Java多sheet模板导出表格/</div>
     </div>
     <div class="license-meta">
       
@@ -362,7 +380,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月29日</div>
+          <div>2022年7月1日</div>
         </div>
       
       
@@ -392,18 +410,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/07/01/Java%E5%A4%9Asheet%E6%A8%A1%E6%9D%BF%E5%AF%BC%E5%87%BA%E8%A1%A8%E6%A0%BC/" title="Java多sheet模板导出表格">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Java多sheet模板导出表格</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/06/16/docker%E5%AE%B9%E5%99%A8%E8%BF%81%E7%A7%BB%E6%95%99%E7%A8%8B/" title="docker容器迁移教程">
-                        <span class="hidden-mobile">docker容器迁移教程</span>
+                      <a href="/2022/06/29/win11%E5%AE%89%E5%8D%93%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86%E6%95%99%E7%A8%8B/" title="Windows11安卓子系统添加代理教程">
+                        <span class="hidden-mobile">Windows11安卓子系统添加代理教程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -424,7 +436,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'ab78830b6f7b3eacf03c73bdb957c781'
+            id: '3e935ff4618e2dfc141e5ecefdd0b535'
           }
         )
         var gitalk = new Gitalk(options);
