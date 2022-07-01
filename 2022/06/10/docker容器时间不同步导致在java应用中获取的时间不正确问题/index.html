@@ -16,16 +16,16 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+    <meta name="description" content="一、前言 在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案 1、首选需要确保宿主机的时区和时间的准确 在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区 date命令： 123date">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker容器时间不同步导致在java应用中获取的时间不正确问题">
 <meta property="og:url" content="https://blog.aunero.ga/2022/06/10/docker%E5%AE%B9%E5%99%A8%E6%97%B6%E9%97%B4%E4%B8%8D%E5%90%8C%E6%AD%A5%E5%AF%BC%E8%87%B4%E5%9C%A8java%E5%BA%94%E7%94%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E6%AD%A3%E7%A1%AE%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+<meta property="og:description" content="一、前言 在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案 1、首选需要确保宿主机的时区和时间的准确 在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区 date命令： 123date">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
 <meta property="article:published_time" content="2022-06-10T02:42:36.000Z">
-<meta property="article:modified_time" content="2022-06-10T08:37:49.110Z">
+<meta property="article:modified_time" content="2022-07-01T09:14:42.458Z">
 <meta property="article:author" content="AuthurNero">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="docker">
@@ -248,7 +248,7 @@
         
         
           <!-- compatible with older versions-->
-          10 分钟
+          9 分钟
         
       </span>
     
@@ -290,37 +290,38 @@
             
             <div class="markdown-body">
               
-              <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
-<h3 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h3><h4 id="1、首选需要确保宿主机的时区和时间的准确"><a href="#1、首选需要确保宿主机的时区和时间的准确" class="headerlink" title="1、首选需要确保宿主机的时区和时间的准确"></a>1、首选需要确保宿主机的时区和时间的准确</h4><p>现在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）</p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/image-20220610112000077.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区"><a href="#2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区" class="headerlink" title="2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区"></a>2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区</h4><h5 id="date命令："><a href="#date命令：" class="headerlink" title="date命令："></a>date命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">date                	#查看当前时间，结果如下：2017年 01月 06日 星期五 13:02:55 CST<br>date -s 14:03:35		#设置当前时间，结果如下：2017年 01月 06日 星期五 14:03:35 CST<br>date -s 2017-01-08    	#设置当前日期，结果如下：2017年 01月 08日 星期五 00:00:00  CST<br></code></pre></td></tr></table></figure>
-
-<h5 id="ntpdate命令："><a href="#ntpdate命令：" class="headerlink" title="ntpdate命令："></a>ntpdate命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ntpdate -u 210.72.145.44   #网络时间同步命令<br></code></pre></td></tr></table></figure>
-
+              <h3 id="一、前言">一、前言</h3>
+<p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
+<h3 id="二、解决方案">二、解决方案</h3>
+<h4 id="1、首选需要确保宿主机的时区和时间的准确">1、首选需要确保宿主机的时区和时间的准确</h4>
+<p>在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）</p>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/image-20220610112000077.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h4 id="2、若宿主机时区或者时间不准确，可以用date-ntpdate和tzdata同步一下时间以及更改时区">2、若宿主机时区或者时间不准确，可以用date/ntpdate和tzdata同步一下时间以及更改时区</h4>
+<h5 id="date命令：">date命令：</h5>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">date                	#查看当前时间，结果如下：2017年 01月 06日 星期五 13:02:55 CST<br>date -s 14:03:35		#设置当前时间，结果如下：2017年 01月 06日 星期五 14:03:35 CST<br>date -s 2017-01-08    	#设置当前日期，结果如下：2017年 01月 08日 星期五 00:00:00  CST<br></code></pre></td></tr></table></figure>
+<h5 id="ntpdate命令：">ntpdate命令：</h5>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ntpdate -u 210.72.145.44   #网络时间同步命令<br></code></pre></td></tr></table></figure>
 <blockquote>
 <p>注意：若不加上-u参数， 会出现以下提示：no server suitable for synchronization found</p>
 <p>-u：从man ntpdate中可以看出-u参数可以越过防火墙与主机同步；</p>
 <p>210.72.145.44：中国国家授时中心的官方服务器。</p>
 </blockquote>
-<h5 id="ntp常用服务器："><a href="#ntp常用服务器：" class="headerlink" title="ntp常用服务器："></a>ntp常用服务器：</h5><p>中国国家授时中心：210.72.145.44</p>
-<p>NTP服务器(上海) ：ntp.api.bz</p>
+<h5 id="ntp常用服务器：">ntp常用服务器：</h5>
+<p>中国国家授时中心：210.72.145.44</p>
+<p>NTP服务器(上海) ：<a target="_blank" rel="noopener" href="http://ntp.api.bz">ntp.api.bz</a></p>
 <p>经测试中国国家授时中心与NTP上海服务器可以正常同步时间，注意需要加上-u参数！</p>
-<h5 id="时区修改："><a href="#时区修改：" class="headerlink" title="时区修改："></a>时区修改：</h5><p>使用tzselect， 选择到China&#x2F;Shanghai即可</p>
+<h5 id="时区修改：">时区修改：</h5>
+<p>使用tzselect， 选择到China/Shanghai即可</p>
 <p>若显示未安装tzselect，可以安装一下tzdata</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install tzdata 	#centos<br>apt-get install tzdata 	#ubuntu<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。"><a href="#3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。" class="headerlink" title="3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。"></a>3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp /usr/share/zoneinfo 容器名称:/usr/share/<br></code></pre></td></tr></table></figure>
-
-<h4 id="2、进入到容器中"><a href="#2、进入到容器中" class="headerlink" title="2、进入到容器中"></a>2、进入到容器中</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it 容器名称 /bin/bash<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、创建软连接，修改时区。"><a href="#3、创建软连接，修改时区。" class="headerlink" title="3、创建软连接，修改时区。"></a>3、创建软连接，修改时区。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br>echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone<br></code></pre></td></tr></table></figure>
-
-<h4 id="4、查看时间，进行测试。"><a href="#4、查看时间，进行测试。" class="headerlink" title="4、查看时间，进行测试。"></a>4、查看时间，进行测试。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -R<br></code></pre></td></tr></table></figure>
-
-
-
-
-
+<h4 id="3、复制宿主机上的zoneinfo文件夹到容器下的-usr-share-目录下。">3、复制宿主机上的zoneinfo文件夹到容器下的/usr/share/目录下。</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp /usr/share/zoneinfo 容器名称:/usr/share/<br></code></pre></td></tr></table></figure>
+<h4 id="2、进入到容器中">2、进入到容器中</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it 容器名称 /bin/bash<br></code></pre></td></tr></table></figure>
+<h4 id="3、创建软连接，修改时区。">3、创建软连接，修改时区。</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br>echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone<br></code></pre></td></tr></table></figure>
+<h4 id="4、查看时间，进行测试。">4、查看时间，进行测试。</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -R<br></code></pre></td></tr></table></figure>
 <p>参考文章:</p>
 <p><a target="_blank" rel="noopener" href="https://www.linuxprobe.com/linux-time.html">如何调整Linux系统为正确时区 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.csdn.net/tags/MtzaIgwsOTY2ODQtYmxvZwO0O0OO0O0O.html">linux中同步时间的命令是什么 - CSDN</a></p>
