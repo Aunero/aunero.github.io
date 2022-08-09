@@ -16,28 +16,30 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+    <meta name="description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;Misaka-blog&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.c">
 <meta property="og:type" content="article">
-<meta property="og:title" content="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-<meta property="og:url" content="https://blog.aunero.ga/2022/06/10/docker%E5%AE%B9%E5%99%A8%E6%97%B6%E9%97%B4%E4%B8%8D%E5%90%8C%E6%AD%A5%E5%AF%BC%E8%87%B4%E5%9C%A8java%E5%BA%94%E7%94%A8%E4%B8%AD%E8%8E%B7%E5%8F%96%E7%9A%84%E6%97%B6%E9%97%B4%E4%B8%8D%E6%AD%A3%E7%A1%AE%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
+<meta property="og:url" content="https://blog.aunero.ga/2022/05/sspanel-xrayr-tls-nginx-proxy.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
+<meta property="og:description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;Misaka-blog&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.c">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
-<meta property="article:published_time" content="2022-06-10T02:42:36.000Z">
-<meta property="article:modified_time" content="2022-08-09T03:07:36.397Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
+<meta property="article:published_time" content="2022-05-17T06:06:52.000Z">
+<meta property="article:modified_time" content="2022-08-09T03:21:26.779Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="docker">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="v2ray">
+<meta property="article:tag" content="sspanel">
+<meta property="article:tag" content="XrayR">
+<meta property="article:tag" content="nginx">
+<meta property="article:tag" content="反向代理">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>docker容器时间不同步导致在java应用中获取的时间不正确问题 - Aunero&#39;s Blog</title>
+  <title>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -212,7 +214,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="docker容器时间不同步导致在java应用中获取的时间不正确问题"></span>
+            <span id="subtitle" data-typed-text="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程"></span>
           
         </div>
 
@@ -223,8 +225,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-06-10 10:42" pubdate>
-          2022年6月10日 上午
+        <time datetime="2022-05-17 14:06" pubdate>
+          2022年5月17日 下午
         </time>
       </span>
     
@@ -236,7 +238,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.1k 字
+          1.4k 字
         
       </span>
     
@@ -248,7 +250,7 @@
         
         
           <!-- compatible with older versions-->
-          10 分钟
+          12 分钟
         
       </span>
     
@@ -286,44 +288,46 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">docker容器时间不同步导致在java应用中获取的时间不正确问题</h1>
+            <h1 style="display: none">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</h1>
             
             <div class="markdown-body">
               
-              <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
-<h3 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h3><h4 id="1、首选需要确保宿主机的时区和时间的准确"><a href="#1、首选需要确保宿主机的时区和时间的准确" class="headerlink" title="1、首选需要确保宿主机的时区和时间的准确"></a>1、首选需要确保宿主机的时区和时间的准确</h4><p>在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）</p>
-<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/image-20220610112000077.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区"><a href="#2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区" class="headerlink" title="2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区"></a>2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区</h4><h5 id="date命令："><a href="#date命令：" class="headerlink" title="date命令："></a>date命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">date                	#查看当前时间，结果如下：2017年 01月 06日 星期五 13:02:55 CST<br>date -s 14:03:35		#设置当前时间，结果如下：2017年 01月 06日 星期五 14:03:35 CST<br>date -s 2017-01-08    	#设置当前日期，结果如下：2017年 01月 08日 星期五 00:00:00  CST<br></code></pre></td></tr></table></figure>
+              <h2 id="后端信息"><a href="#后端信息" class="headerlink" title="后端信息"></a>后端信息</h2><p>XrayR后端说明：<a target="_blank" rel="noopener" href="https://crackair.gitbook.io/xrayr-project/">https://crackair.gitbook.io/xrayr-project/</a></p>
+<p>XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Misaka-blog/XrayR">https://github.com/Misaka-blog/XrayR</a></p>
+<h2 id="前端配置"><a href="#前端配置" class="headerlink" title="前端配置"></a>前端配置</h2><p>节点地址：</p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">IP;监听端口;alterId;(tcp或ws);(tls或不填);path=/xxx|<span class="hljs-type">host</span>=xxxx.com|<span class="hljs-type">server</span>=xxx.com|<span class="hljs-type">outside_port</span>=xxx<br></code></pre></td></tr></table></figure>
 
-<h5 id="ntpdate命令："><a href="#ntpdate命令：" class="headerlink" title="ntpdate命令："></a>ntpdate命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ntpdate -u 210.72.145.44   #网络时间同步命令<br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注意：若不加上-u参数， 会出现以下提示：no server suitable for synchronization found</p>
-<p>-u：从man ntpdate中可以看出-u参数可以越过防火墙与主机同步；</p>
-<p>210.72.145.44：中国国家授时中心的官方服务器。</p>
-</blockquote>
-<h5 id="ntp常用服务器："><a href="#ntp常用服务器：" class="headerlink" title="ntp常用服务器："></a>ntp常用服务器：</h5><p>中国国家授时中心：210.72.145.44</p>
-<p>NTP服务器(上海) ：ntp.api.bz</p>
-<p>经测试中国国家授时中心与NTP上海服务器可以正常同步时间，注意需要加上-u参数！</p>
-<h5 id="时区修改："><a href="#时区修改：" class="headerlink" title="时区修改："></a>时区修改：</h5><p>使用tzselect， 选择到China&#x2F;Shanghai即可</p>
-<p>若显示未安装tzselect，可以安装一下tzdata</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install tzdata 	#centos<br>apt-get install tzdata 	#ubuntu<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。"><a href="#3、复制宿主机上的zoneinfo文件夹到容器下的-x2F-usr-x2F-share-x2F-目录下。" class="headerlink" title="3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。"></a>3、复制宿主机上的zoneinfo文件夹到容器下的&#x2F;usr&#x2F;share&#x2F;目录下。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker cp /usr/share/zoneinfo 容器名称:/usr/share/<br></code></pre></td></tr></table></figure>
-
-<h4 id="2、进入到容器中"><a href="#2、进入到容器中" class="headerlink" title="2、进入到容器中"></a>2、进入到容器中</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">docker exec -it --user=root 容器名称 /bin/bash<br></code></pre></td></tr></table></figure>
-
-<h4 id="3、创建软连接，修改时区。"><a href="#3、创建软连接，修改时区。" class="headerlink" title="3、创建软连接，修改时区。"></a>3、创建软连接，修改时区。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br>echo &quot;Asia/Shanghai&quot; &gt; /etc/timezone<br></code></pre></td></tr></table></figure>
-
-<h4 id="4、查看时间，进行测试。"><a href="#4、查看时间，进行测试。" class="headerlink" title="4、查看时间，进行测试。"></a>4、查看时间，进行测试。</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">date -R<br></code></pre></td></tr></table></figure>
+<p>类型：V2Ray</p>
+<h2 id="后端配置"><a href="#后端配置" class="headerlink" title="后端配置"></a>后端配置</h2><ul>
+<li>安装后端脚本：</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N https://raw.githubusercontents.com/Misaka-blog/XrayR-script/master/install.sh &amp;&amp; bash install.sh<br></code></pre></td></tr></table></figure>
 
 <ul>
-<li>若容器中有服务，需要重启容器，服务获取的时间才会正确。</li>
+<li>时间同步 (VMess协议对时间同步有要求, 如果用VLESS可以跳过)</li>
 </ul>
-<p>参考文章:</p>
-<p><a target="_blank" rel="noopener" href="https://www.linuxprobe.com/linux-time.html">如何调整Linux系统为正确时区 | 《Linux就该这么学》 (linuxprobe.com)</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.csdn.net/tags/MtzaIgwsOTY2ODQtYmxvZwO0O0OO0O0O.html">linux中同步时间的命令是什么 - CSDN</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tiny_du/article/details/124024562">修改docker的时间_在路上的阿帅的博客-CSDN博客_docker 修改时间</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install -y ntp<br>systemctl enable ntpd<br>ntpdate -q 0.rhel.pool.ntp.org<br>systemctl restart ntpd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改时区:</span><br>tzselect<br>TZ=&#x27;Asia/Shanghai&#x27;;export TZ<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>配置文件 &#x2F;etc&#x2F;XrayR&#x2F;config.yml, 以下为部分修改项</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Nodes:</span><br>  <span class="hljs-bullet">-</span><br>    <span class="hljs-attr">PanelType:</span> <span class="hljs-string">&quot;SSpanel&quot;</span> <span class="hljs-comment"># 面板类型: SSpanel, V2board, PMpanel, Proxypanel</span><br>    <span class="hljs-attr">ApiConfig:</span><br>      <span class="hljs-attr">ApiHost:</span> <span class="hljs-string">&quot;https://xxx.com&quot;</span>  	<span class="hljs-comment">#api地址 机场地址</span><br>      <span class="hljs-attr">ApiKey:</span> <span class="hljs-string">&quot;123123&quot;</span>				<span class="hljs-comment">#apikey 在你网站的config里配置过的</span><br>      <span class="hljs-attr">NodeID:</span> <span class="hljs-number">15</span>					<span class="hljs-comment">#节点id</span><br>      <span class="hljs-attr">EnableVless:</span> <span class="hljs-literal">true</span> 			<span class="hljs-comment"># Enable Vless for V2ray Type vless协议比较快</span><br>    <span class="hljs-attr">ControllerConfig:</span><br>      <span class="hljs-attr">ListenIP:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-comment"># IP address you want to listen 监听ip, 反代需要填</span><br>      <span class="hljs-attr">CertConfig:</span><br>        <span class="hljs-attr">CertMode:</span> <span class="hljs-string">none</span> <span class="hljs-comment">#反代直接关闭 交给后面的脚本申请证书</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">输出当前配置文件内容</span><br>xrayr config<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">启动xrayr</span><br>xrayr start<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">指令向导</span><br>xrayr<br></code></pre></td></tr></table></figure>
+
+<h2 id="BBR加速"><a href="#BBR加速" class="headerlink" title="BBR加速"></a>BBR加速</h2><p>centos bbr</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N --no-check-certificate &quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh<br></code></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">功能比较强大</span><br>bash &lt;(curl -Lso- https://git.io/kernel.sh)<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置反代"><a href="#配置反代" class="headerlink" title="配置反代"></a>配置反代</h2><p>使用前先将域名解析到后端节点ip地址</p>
+<p>一键脚本, 运行后选18就行了, 按照提示操作即可, 脚本跑完会给出前端节点配置信息, 需要去节点配置改一下</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">bash &lt;(curl -sL https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/AuthurNero/</span>soga_nginx<span class="hljs-regexp">/xrayr/</span>xrayr-nginx.sh)<br></code></pre></td></tr></table></figure>
+
+
+
 
               
             </div>
@@ -341,7 +345,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Java%E5%BC%80%E5%8F%91/" class="category-chain-item">Java开发</a>
+  <a href="/categories/VPN%E6%8A%80%E6%9C%AF/" class="category-chain-item">VPN技术</a>
   
   
 
@@ -356,11 +360,15 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Linux/">#Linux</a>
+        <a href="/tags/v2ray/">#v2ray</a>
       
-        <a href="/tags/docker/">#docker</a>
+        <a href="/tags/sspanel/">#sspanel</a>
       
-        <a href="/tags/Java/">#Java</a>
+        <a href="/tags/XrayR/">#XrayR</a>
+      
+        <a href="/tags/nginx/">#nginx</a>
+      
+        <a href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">#反向代理</a>
       
     </div>
   
@@ -372,8 +380,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>docker容器时间不同步导致在java应用中获取的时间不正确问题</div>
-      <div>https://blog.aunero.ga/2022/06/10/docker容器时间不同步导致在java应用中获取的时间不正确问题/</div>
+      <div>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</div>
+      <div>https://blog.aunero.ga/2022/05/sspanel-xrayr-tls-nginx-proxy.html</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +393,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年6月10日</div>
+          <div>2022年5月17日</div>
         </div>
       
       
@@ -415,9 +423,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/16/Windows-V2rayN%E7%9B%B4%E8%BF%9Eor%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B/" title="Windows V2rayN直连or代理规则配置教程">
+                      <a href="/2022/06/docker-time-java-app.html" title="docker容器时间不同步导致在java应用中获取的时间不正确问题">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Windows V2rayN直连or代理规则配置教程</span>
+                        <span class="hidden-mobile">docker容器时间不同步导致在java应用中获取的时间不正确问题</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -425,8 +433,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/05/17/sspanel+XrayR%E5%90%8E%E7%AB%AF+tls+nginx%E5%8F%8D%E4%BB%A3(%E5%90%AB%E4%B8%80%E9%94%AE%E8%84%9A%E6%9C%AC)%20%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B/" title="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
-                        <span class="hidden-mobile">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</span>
+                      <a href="/2022/05/linux-auto-reboot.html" title="Linux自动重启配置教程">
+                        <span class="hidden-mobile">Linux自动重启配置教程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -447,7 +455,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: '4544e5fa5d56ce20de882cf25ba52738'
+            id: 'd3e85a4160fb7358f9643dc4451145e4'
           }
         )
         var gitalk = new Gitalk(options);
