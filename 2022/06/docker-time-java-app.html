@@ -28,8 +28,8 @@
 <meta property="article:modified_time" content="2022-08-09T03:19:43.038Z">
 <meta property="article:author" content="AuthurNero">
 <meta property="article:tag" content="Linux">
-<meta property="article:tag" content="docker">
 <meta property="article:tag" content="Java">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
   
@@ -75,7 +75,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.aunero.ga","root":"/","version":"1.9.1","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.aunero.ga","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -84,6 +84,23 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
 
   
 <meta name="generator" content="Hexo 6.2.0"></head>
@@ -288,9 +305,10 @@
             <!-- SEO header -->
             <h1 style="display: none">docker容器时间不同步导致在java应用中获取的时间不正确问题</h1>
             
-            <div class="markdown-body">
-              
-              <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
+            
+              <div class="markdown-body">
+                
+                <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。</p>
 <h3 id="二、解决方案"><a href="#二、解决方案" class="headerlink" title="二、解决方案"></a>二、解决方案</h3><h4 id="1、首选需要确保宿主机的时区和时间的准确"><a href="#1、首选需要确保宿主机的时区和时间的准确" class="headerlink" title="1、首选需要确保宿主机的时区和时间的准确"></a>1、首选需要确保宿主机的时区和时间的准确</h4><p>在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）</p>
 <p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/image-20220610112000077.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区"><a href="#2、若宿主机时区或者时间不准确，可以用date-x2F-ntpdate和tzdata同步一下时间以及更改时区" class="headerlink" title="2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区"></a>2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区</h4><h5 id="date命令："><a href="#date命令：" class="headerlink" title="date命令："></a>date命令：</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">date                	#查看当前时间，结果如下：2017年 01月 06日 星期五 13:02:55 CST<br>date -s 14:03:35		#设置当前时间，结果如下：2017年 01月 06日 星期五 14:03:35 CST<br>date -s 2017-01-08    	#设置当前日期，结果如下：2017年 01月 08日 星期五 00:00:00  CST<br></code></pre></td></tr></table></figure>
@@ -325,8 +343,9 @@
 <p><a target="_blank" rel="noopener" href="https://www.csdn.net/tags/MtzaIgwsOTY2ODQtYmxvZwO0O0OO0O0O.html">linux中同步时间的命令是什么 - CSDN</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tiny_du/article/details/124024562">修改docker的时间_在路上的阿帅的博客-CSDN博客_docker 修改时间</a></p>
 
-              
-            </div>
+                
+              </div>
+            
             <hr/>
             <div>
               <div class="post-metas my-3">
@@ -358,9 +377,9 @@
       
         <a href="/tags/Linux/">#Linux</a>
       
-        <a href="/tags/docker/">#docker</a>
-      
         <a href="/tags/Java/">#Java</a>
+      
+        <a href="/tags/docker/">#docker</a>
       
     </div>
   
@@ -510,6 +529,7 @@
 
 
 
+
     
 
     
@@ -622,23 +642,6 @@
 
 
   
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-  
     <script  src="/js/img-lazyload.js" ></script>
   
 
@@ -673,74 +676,9 @@
 </script>
 
 
-  <script>
-  (function() {
-    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
-    var enableCopy = CONFIG.copy_btn;
-    if (!enableLang && !enableCopy) {
-      return;
-    }
+  <script src=https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.9/clipboard.min.js></script>
 
-    function getBgClass(ele) {
-      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
-    }
-
-    var copyTmpl = '';
-    copyTmpl += '<div class="code-widget">';
-    copyTmpl += 'LANG';
-    copyTmpl += '</div>';
-    jQuery('.markdown-body pre').each(function() {
-      var $pre = jQuery(this);
-      if ($pre.find('code.mermaid').length > 0) {
-        return;
-      }
-      if ($pre.find('span.line').length > 0) {
-        return;
-      }
-
-      var lang = '';
-
-      if (enableLang) {
-        lang = CONFIG.code_language.default;
-        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
-          lang = $pre[0].children[0].classList[1];
-        } else if ($pre[0].getAttribute('data-language')) {
-          lang = $pre[0].getAttribute('data-language');
-        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
-          lang = $pre[0].children[0].classList[1];
-          $pre.parent().addClass('code-wrapper');
-        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
-          $pre.wrap('<div class="code-wrapper"></div>');
-        }
-        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
-      }
-      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
-        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
-
-      if (enableCopy) {
-        Fluid.utils.createScript('https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.9/clipboard.min.js', function() {
-          var clipboard = new window.ClipboardJS('.copy-btn', {
-            target: function(trigger) {
-              var nodes = trigger.parentNode.childNodes;
-              for (var i = 0; i < nodes.length; i++) {
-                if (nodes[i].tagName === 'CODE') {
-                  return nodes[i];
-                }
-              }
-            }
-          });
-          clipboard.on('success', function(e) {
-            e.clearSelection();
-            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
-            setTimeout(function() {
-              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
-            }, 2000);
-          });
-        });
-      }
-    });
-  })();
-</script>
+  <script>Fluid.plugins.codeWidget();</script>
 
 
   

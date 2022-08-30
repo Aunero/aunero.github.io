@@ -72,11 +72,11 @@
     
     <tags>
       
+      <tag>ElasticSearch</tag>
+      
       <tag>Linux</tag>
       
       <tag>Java</tag>
-      
-      <tag>ElasticSearch</tag>
       
     </tags>
     
@@ -213,9 +213,9 @@
       
       <tag>Linux</tag>
       
-      <tag>docker</tag>
-      
       <tag>Java</tag>
+      
+      <tag>docker</tag>
       
     </tags>
     
