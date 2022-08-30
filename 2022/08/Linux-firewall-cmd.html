@@ -16,30 +16,26 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;newxrayr&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.com|">
+    <meta name="description" content="防火墙常用命令：12345678910111213firewall-cmd --state              ##查看防火墙状态，是否是runningfirewall-cmd --reload              ##重新载入配置，比如添加规则之后，需要执行此命令firewall-cmd --get-zones            ##列出支持的zonefirewall-cmd -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程">
-<meta property="og:url" content="https://blog.aunero.ga/2022/05/sspanel-xrayr-tls-nginx-proxy.html">
+<meta property="og:title" content="Linux防火墙常用命令">
+<meta property="og:url" content="https://blog.aunero.ga/2022/08/Linux-firewall-cmd.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="后端信息XrayR后端说明：https:&#x2F;&#x2F;crackair.gitbook.io&#x2F;xrayr-project&#x2F; XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本 https:&#x2F;&#x2F;github.com&#x2F;newxrayr&#x2F;XrayR 前端配置节点地址： 1IP;监听端口;alterId;(tcp或ws);(tls或不填);path&#x3D;&#x2F;xxx|host&#x3D;xxxx.com|">
+<meta property="og:description" content="防火墙常用命令：12345678910111213firewall-cmd --state              ##查看防火墙状态，是否是runningfirewall-cmd --reload              ##重新载入配置，比如添加规则之后，需要执行此命令firewall-cmd --get-zones            ##列出支持的zonefirewall-cmd -">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
-<meta property="article:published_time" content="2022-05-17T06:06:52.000Z">
-<meta property="article:modified_time" content="2022-08-23T08:45:43.680Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206101002011.png">
+<meta property="article:published_time" content="2022-08-30T03:52:21.000Z">
+<meta property="article:modified_time" content="2022-08-30T05:45:10.620Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="v2ray">
-<meta property="article:tag" content="sspanel">
-<meta property="article:tag" content="XrayR">
-<meta property="article:tag" content="nginx">
-<meta property="article:tag" content="反向代理">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220609192814.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202206101002011.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程 - Aunero&#39;s Blog</title>
+  <title>Linux防火墙常用命令 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +210,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程"></span>
+            <span id="subtitle" data-typed-text="Linux防火墙常用命令"></span>
           
         </div>
 
@@ -225,8 +221,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-05-17 14:06" pubdate>
-          2022年5月17日 下午
+        <time datetime="2022-08-30 11:52" pubdate>
+          2022年8月30日 中午
         </time>
       </span>
     
@@ -238,7 +234,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          1.4k 字
+          1k 字
         
       </span>
     
@@ -250,7 +246,7 @@
         
         
           <!-- compatible with older versions-->
-          12 分钟
+          9 分钟
         
       </span>
     
@@ -288,43 +284,44 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</h1>
+            <h1 style="display: none">Linux防火墙常用命令</h1>
             
             <div class="markdown-body">
               
-              <h2 id="后端信息"><a href="#后端信息" class="headerlink" title="后端信息"></a>后端信息</h2><p>XrayR后端说明：<a target="_blank" rel="noopener" href="https://crackair.gitbook.io/xrayr-project/">https://crackair.gitbook.io/xrayr-project/</a></p>
-<p>XrayR原作者已经删库了, 这里就使用了Misaki No大佬的后续开发脚本</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/newxrayr/XrayR">https://github.com/newxrayr/XrayR</a></p>
-<h2 id="前端配置"><a href="#前端配置" class="headerlink" title="前端配置"></a>前端配置</h2><p>节点地址：</p>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs coq">IP;监听端口;alterId;(tcp或ws);(tls或不填);path=/xxx|<span class="hljs-type">host</span>=xxxx.com|<span class="hljs-type">server</span>=xxx.com|<span class="hljs-type">outside_port</span>=xxx<br></code></pre></td></tr></table></figure>
+              <h5 id="防火墙常用命令："><a href="#防火墙常用命令：" class="headerlink" title="防火墙常用命令："></a>防火墙常用命令：</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sh">firewall-cmd --state              <span class="hljs-comment">##查看防火墙状态，是否是running</span><br>firewall-cmd --reload              <span class="hljs-comment">##重新载入配置，比如添加规则之后，需要执行此命令</span><br>firewall-cmd --get-zones            <span class="hljs-comment">##列出支持的zone</span><br>firewall-cmd --get-services           <span class="hljs-comment">##列出支持的服务，在列表中的服务是放行的</span><br>firewall-cmd --query-service ftp        <span class="hljs-comment">##查看ftp服务是否支持，返回yes或者no</span><br>firewall-cmd --add-service=ftp         <span class="hljs-comment">##临时开放ftp服务</span><br>firewall-cmd --add-service=ftp --permanent   <span class="hljs-comment">##永久开放ftp服务</span><br>firewall-cmd --remove-service=ftp --permanent  <span class="hljs-comment">##永久移除ftp服务</span><br>firewall-cmd --add-port=80/tcp --permanent   <span class="hljs-comment">##永久添加80端口 </span><br>firewall-cmd --remove-port=80/tcp --permanent   <span class="hljs-comment">##永久移除80端口 </span><br>firewall-cmd --zone=public --list-ports    <span class="hljs-comment">##查看已开放的端口</span><br><br>iptables -L -n                 <span class="hljs-comment">##查看规则，这个命令是和iptables的相同的</span><br></code></pre></td></tr></table></figure>
 
-<p>类型：V2Ray</p>
-<h2 id="后端配置"><a href="#后端配置" class="headerlink" title="后端配置"></a>后端配置</h2><ul>
-<li>安装后端脚本：</li>
+
+
+<h5 id="1、开放端口"><a href="#1、开放端口" class="headerlink" title="1、开放端口"></a>1、开放端口</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sh">firewall-cmd --zone=public --add-port=5672/tcp --permanent  <span class="hljs-comment"># 开放5672端口</span><br><br>firewall-cmd --zone=public --remove-port=5672/tcp --permanent <span class="hljs-comment">#关闭5672端口</span><br><br>firewall-cmd --reload  <span class="hljs-comment"># 配置立即生效</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="2、查看防火墙所有开放的端口"><a href="#2、查看防火墙所有开放的端口" class="headerlink" title="2、查看防火墙所有开放的端口"></a>2、查看防火墙所有开放的端口</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">firewall-cmd --zone=public --list-ports<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="3-、关闭防火墙"><a href="#3-、关闭防火墙" class="headerlink" title="3.、关闭防火墙"></a>3.、关闭防火墙</h5><ul>
+<li>如果要开放的端口太多，嫌麻烦，可以关闭防火墙，安全性自行评估</li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N https://raw.githubusercontents.com/Misaka-blog/XrayR-script/master/install.sh &amp;&amp; bash install.sh<br></code></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">systemctl stop firewalld.service<br></code></pre></td></tr></table></figure>
 
+
+
+<h5 id="4、查看防火墙状态"><a href="#4、查看防火墙状态" class="headerlink" title="4、查看防火墙状态"></a>4、查看防火墙状态</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">firewall-cmd --state<br></code></pre></td></tr></table></figure>
+
+<h5 id="5、查看监听的端口"><a href="#5、查看监听的端口" class="headerlink" title="5、查看监听的端口"></a>5、查看监听的端口</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">netstat -lnpt<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202208301156571.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li>时间同步 (VMess协议对时间同步有要求, 如果用VLESS可以跳过)</li>
+<li><em>PS:centos7默认没有 netstat 命令，需要安装 net-tools 工具，yum install -y net-tools</em></li>
 </ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">yum install -y ntp<br>systemctl enable ntpd<br>ntpdate -q 0.rhel.pool.ntp.org<br>systemctl restart ntpd<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">修改时区:</span><br>tzselect<br>TZ=&#x27;Asia/Shanghai&#x27;;export TZ<br></code></pre></td></tr></table></figure>
+<h5 id="6、检查端口被哪个进程占用"><a href="#6、检查端口被哪个进程占用" class="headerlink" title="6、检查端口被哪个进程占用"></a>6、检查端口被哪个进程占用</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">netstat -lnpt |grep 5672<br></code></pre></td></tr></table></figure>
 
-<ul>
-<li>配置文件 &#x2F;etc&#x2F;XrayR&#x2F;config.yml, 以下为部分修改项</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">Nodes:</span><br>  <span class="hljs-bullet">-</span><br>    <span class="hljs-attr">PanelType:</span> <span class="hljs-string">&quot;SSpanel&quot;</span> <span class="hljs-comment"># 面板类型: SSpanel, V2board, PMpanel, Proxypanel</span><br>    <span class="hljs-attr">ApiConfig:</span><br>      <span class="hljs-attr">ApiHost:</span> <span class="hljs-string">&quot;https://xxx.com&quot;</span>  	<span class="hljs-comment">#api地址 机场地址</span><br>      <span class="hljs-attr">ApiKey:</span> <span class="hljs-string">&quot;123123&quot;</span>				<span class="hljs-comment">#apikey 在你网站的config里配置过的</span><br>      <span class="hljs-attr">NodeID:</span> <span class="hljs-number">15</span>					<span class="hljs-comment">#节点id</span><br>      <span class="hljs-attr">EnableVless:</span> <span class="hljs-literal">true</span> 			<span class="hljs-comment"># Enable Vless for V2ray Type vless协议比较快</span><br>    <span class="hljs-attr">ControllerConfig:</span><br>      <span class="hljs-attr">ListenIP:</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-comment"># IP address you want to listen 监听ip, 反代需要填</span><br>      <span class="hljs-attr">CertConfig:</span><br>        <span class="hljs-attr">CertMode:</span> <span class="hljs-string">none</span> <span class="hljs-comment">#反代直接关闭 交给后面的脚本申请证书</span><br></code></pre></td></tr></table></figure>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202208301156139.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="7、查看进程的详细信息"><a href="#7、查看进程的详细信息" class="headerlink" title="7、查看进程的详细信息"></a>7、查看进程的详细信息</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">ps 6832<br></code></pre></td></tr></table></figure>
 
-<h3 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">输出当前配置文件内容</span><br>xrayr config<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">启动xrayr</span><br>xrayr start<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">指令向导</span><br>xrayr<br></code></pre></td></tr></table></figure>
-
-<h2 id="BBR加速"><a href="#BBR加速" class="headerlink" title="BBR加速"></a>BBR加速</h2><p>centos bbr</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -N --no-check-certificate &quot;https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh<br></code></pre></td></tr></table></figure>
-
-<p>或者</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">功能比较强大</span><br>bash &lt;(curl -Lso- https://git.io/kernel.sh)<br></code></pre></td></tr></table></figure>
-
-<h2 id="配置反代"><a href="#配置反代" class="headerlink" title="配置反代"></a>配置反代</h2><p>使用前先将域名解析到后端节点ip地址</p>
-<p>一键脚本, 运行后选18就行了, 按照提示操作即可, 脚本跑完会给出前端节点配置信息, 需要去节点配置改一下</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">bash &lt;(curl -sL https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/AuthurNero/</span>soga_nginx<span class="hljs-regexp">/xrayr/</span>xrayr-nginx.sh)<br></code></pre></td></tr></table></figure>
+<p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202208301156183.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="8、中止进程"><a href="#8、中止进程" class="headerlink" title="8、中止进程"></a>8、中止进程</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh"><span class="hljs-built_in">kill</span> -9 6832<br></code></pre></td></tr></table></figure>
 
 
 
@@ -345,7 +342,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/VPN%E6%8A%80%E6%9C%AF/" class="category-chain-item">VPN技术</a>
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
   
   
 
@@ -360,15 +357,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/v2ray/">#v2ray</a>
-      
-        <a href="/tags/sspanel/">#sspanel</a>
-      
-        <a href="/tags/XrayR/">#XrayR</a>
-      
-        <a href="/tags/nginx/">#nginx</a>
-      
-        <a href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">#反向代理</a>
+        <a href="/tags/Linux/">#Linux</a>
       
     </div>
   
@@ -380,8 +369,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>sspanel+XrayR后端+tls+nginx反代(含一键脚本) 对接教程</div>
-      <div>https://blog.aunero.ga/2022/05/sspanel-xrayr-tls-nginx-proxy.html</div>
+      <div>Linux防火墙常用命令</div>
+      <div>https://blog.aunero.ga/2022/08/Linux-firewall-cmd.html</div>
     </div>
     <div class="license-meta">
       
@@ -393,7 +382,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年5月17日</div>
+          <div>2022年8月30日</div>
         </div>
       
       
@@ -423,18 +412,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/06/docker-time-java-app.html" title="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">docker容器时间不同步导致在java应用中获取的时间不正确问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/05/linux-auto-reboot.html" title="Linux自动重启配置教程">
-                        <span class="hidden-mobile">Linux自动重启配置教程</span>
+                      <a href="/2022/08/yum-install-docker.html" title="通过yum安装docker教程">
+                        <span class="hidden-mobile">通过yum安装docker教程</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -455,7 +438,7 @@
         var options = Object.assign(
           {"clientID":"657d99d369ceaa5f02b2","clientSecret":"f27c90a204eda3e828e95de00c329662d3e194e6","repo":"blog-comments","owner":"AuthurNero","admin":["AuthurNero"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'd3e85a4160fb7358f9643dc4451145e4'
+            id: '484adfe44e7150c95b416f5f4e86823d'
           }
         )
         var gitalk = new Gitalk(options);
