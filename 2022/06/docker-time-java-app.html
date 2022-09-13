@@ -19,7 +19,7 @@
     <meta name="description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-<meta property="og:url" content="https://blog.aunero.ga/2022/06/docker-time-java-app.html">
+<meta property="og:url" content="https://authurnero.github.io/2022/06/docker-time-java-app.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
 <meta property="og:description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
 <meta property="og:locale" content="zh_CN">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.aunero.ga","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"srvftHS8ajBed8VASezTN97Q-MdYXbMMI","app_key":"3UpVcARVzFu8pi6Rf9AAQP3g","server_url":null,"path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"authurnero.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"srvftHS8ajBed8VASezTN97Q-MdYXbMMI","app_key":"3UpVcARVzFu8pi6Rf9AAQP3g","server_url":null,"path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -400,7 +400,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>docker容器时间不同步导致在java应用中获取的时间不正确问题</div>
-      <div>https://blog.aunero.ga/2022/06/docker-time-java-app.html</div>
+      <div>https://authurnero.github.io/2022/06/docker-time-java-app.html</div>
     </div>
     <div class="license-meta">
       

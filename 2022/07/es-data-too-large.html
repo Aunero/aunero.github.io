@@ -19,7 +19,7 @@
     <meta name="description" content="前言在演示环境测试的时候，发现通过es查的数据偶尔会出现报错的情况，要根据实际情况进行排查和调优。 排查过程1.问题定位查看es报错日志，看了一下大致意思是请求数据的时候内存超限了，触发了熔断器。 12345[2021-03-16T21:05:10,338][DEBUG][o.e.a.a.c.n.i.TransportNodesInfoAction] [java-d-service-es-200-">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ElasticSearch中Data too large问题排查解决方案">
-<meta property="og:url" content="https://blog.aunero.ga/2022/07/es-data-too-large.html">
+<meta property="og:url" content="https://authurnero.github.io/2022/07/es-data-too-large.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
 <meta property="og:description" content="前言在演示环境测试的时候，发现通过es查的数据偶尔会出现报错的情况，要根据实际情况进行排查和调优。 排查过程1.问题定位查看es报错日志，看了一下大致意思是请求数据的时候内存超限了，触发了熔断器。 12345[2021-03-16T21:05:10,338][DEBUG][o.e.a.a.c.n.i.TransportNodesInfoAction] [java-d-service-es-200-">
 <meta property="og:locale" content="zh_CN">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.aunero.ga","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"srvftHS8ajBed8VASezTN97Q-MdYXbMMI","app_key":"3UpVcARVzFu8pi6Rf9AAQP3g","server_url":null,"path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"authurnero.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"srvftHS8ajBed8VASezTN97Q-MdYXbMMI","app_key":"3UpVcARVzFu8pi6Rf9AAQP3g","server_url":null,"path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -389,7 +389,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>ElasticSearch中Data too large问题排查解决方案</div>
-      <div>https://blog.aunero.ga/2022/07/es-data-too-large.html</div>
+      <div>https://authurnero.github.io/2022/07/es-data-too-large.html</div>
     </div>
     <div class="license-meta">
       
