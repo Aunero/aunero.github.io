@@ -1,0 +1,828 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/favicon.png">
+  <link rel="icon" href="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="AuthurNero">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Caffeine介绍redis和caffeine的区别相同点就不用说，广义上都是缓存的方式。咱们就说说不同。  redis是将数据存储到内存里；caffeine是将数据存储在本地应用里 caffeine和redis相比，没有了网络IO上的消耗  那么在高并发场景中，一般我们都是结合使用，形成一二级缓存。caffeine作为一级缓存，redis作为二级缓存。使用流程大致如下：去一级缓存中查找数据（c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Caffeine一级缓存介绍和应用">
+<meta property="og:url" content="https://aunero.github.io/2022/09/caffeine-intro-and-apply.html">
+<meta property="og:site_name" content="Aunero&#39;s Blog">
+<meta property="og:description" content="Caffeine介绍redis和caffeine的区别相同点就不用说，广义上都是缓存的方式。咱们就说说不同。  redis是将数据存储到内存里；caffeine是将数据存储在本地应用里 caffeine和redis相比，没有了网络IO上的消耗  那么在高并发场景中，一般我们都是结合使用，形成一二级缓存。caffeine作为一级缓存，redis作为二级缓存。使用流程大致如下：去一级缓存中查找数据（c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
+<meta property="article:published_time" content="2022-09-23T08:07:57.000Z">
+<meta property="article:modified_time" content="2022-09-29T07:06:18.359Z">
+<meta property="article:author" content="AuthurNero">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Caffeine">
+<meta property="article:tag" content="缓存">
+<meta property="article:tag" content="面向切面编程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
+  
+  
+  
+  <title>Caffeine一级缓存介绍和应用 - Aunero&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"aunero.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ro8MInEicDhDKrPEBb47P9sP-9Nh9j0Va","app_key":"ZjYDvVDsoOj0GWscP4J1nU1T","server_url":"https://ro8minei.lc-cn-e1-shared.com","path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Aunero&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/comment/">
+                <i class="iconfont icon-cliplist"></i>
+                留言板
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Caffeine一级缓存介绍和应用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-23 16:07" pubdate>
+          2022年9月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          <!-- compatible with older versions-->
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          <!-- compatible with older versions-->
+          94 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Caffeine一级缓存介绍和应用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Caffeine介绍"><a href="#Caffeine介绍" class="headerlink" title="Caffeine介绍"></a>Caffeine介绍</h2><h3 id="redis和caffeine的区别"><a href="#redis和caffeine的区别" class="headerlink" title="redis和caffeine的区别"></a>redis和caffeine的区别</h3><p>相同点就不用说，广义上都是缓存的方式。咱们就说说不同。</p>
+<ul>
+<li>redis是将数据存储到内存里；caffeine是将数据存储在本地应用里</li>
+<li>caffeine和redis相比，没有了网络IO上的消耗</li>
+</ul>
+<p>那么在高并发场景中，一般我们都是结合使用，形成一二级缓存。caffeine作为一级缓存，redis作为二级缓存。<br>使用流程大致如下：去一级缓存中查找数据（caffeine-本地应用内）如果没有的话，去二级缓存中查找数据（redis-内存）再没有，再去数据库中查找数据（数据库-磁盘）。</p>
+<p>caffeine项目地址：<a target="_blank" rel="noopener" href="https://github.com/ben-manes/caffeine">ben-manes&#x2F;caffeine: A high performance caching library for Java (github.com)</a></p>
+<h2 id="caffeine的应用"><a href="#caffeine的应用" class="headerlink" title="caffeine的应用"></a>caffeine的应用</h2><p>Caffeine 相当于一个缓存工厂，可以创建出多个缓存实例 Cache。这些缓存实例都继承了 Caffeine 的参数配置，Caffeine 是如何配置的，这些缓存实例就具有什么样的特性和功能。<br>Caffeine 是目前性能最好的本地缓存，因此，在考虑使用本地缓存时，直接选择 Caffeine 即可。</p>
+<h3 id="将caffeine作为一级缓存使用"><a href="#将caffeine作为一级缓存使用" class="headerlink" title="将caffeine作为一级缓存使用"></a>将caffeine作为一级缓存使用</h3><h4 id="1-配置相关"><a href="#1-配置相关" class="headerlink" title="1.配置相关"></a>1.配置相关</h4><ul>
+<li>maven引包，可自行根据流行版本更改版本号：</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.github.ben-manes.caffeine<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>caffeine<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.9.3<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.aspectj<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>aspectjweaver<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>cn.hutool<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>hutool-all<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.5.7<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>缓存配置类：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> com.github.benmanes.caffeine.cache.Caffeine;<br><span class="hljs-keyword">import</span> org.springframework.cache.caffeine.CaffeineCache;<br><span class="hljs-keyword">import</span> org.springframework.cache.interceptor.SimpleKeyGenerator;<br><span class="hljs-keyword">import</span> org.springframework.cache.support.AbstractCacheManager;<br><span class="hljs-keyword">import</span> org.springframework.cache.support.SimpleCacheManager;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Bean;<br><span class="hljs-keyword">import</span> org.springframework.context.annotation.Configuration;<br><br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span> 缓存配置</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CacheConfig</span> &#123;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 配置缓存管理器</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span> 缓存管理器</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> AbstractCacheManager <span class="hljs-title function_">cacheManager</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">SimpleCacheManager</span> <span class="hljs-variable">cacheManager</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleCacheManager</span>();<br>        <span class="hljs-comment">//把各个cache注册到cacheManager中，CaffeineCache实现了org.springframework.cache.Cache接口</span><br>        List&lt;CaffeineCache&gt; caches = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        Arrays.asList(CacheInstance.values()).forEach(cacheInstance -&gt; &#123;<br>            <span class="hljs-type">CaffeineCache</span> <span class="hljs-variable">caffeineCache</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CaffeineCache</span>(cacheInstance.name(), Caffeine.newBuilder()<br>                    .recordStats()<br>                    .expireAfterWrite(cacheInstance.getTtl(), TimeUnit.SECONDS)<br>                    .build());<br>            caches.add(caffeineCache);<br>        &#125;);<br>        cacheManager.setCaches(caches);<br>        <span class="hljs-keyword">return</span> cacheManager;<br><br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> SimpleKeyGenerator <span class="hljs-title function_">simpleKeyGenerator</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleKeyGenerator</span>();<br>    &#125;<br><br><br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>缓存代理类，用来获取缓存和刷新：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> cn.hutool.core.util.ReflectUtil;<br><span class="hljs-keyword">import</span> com.github.benmanes.caffeine.cache.Caffeine;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.cache.Cache;<br><span class="hljs-keyword">import</span> org.springframework.cache.caffeine.CaffeineCache;<br><span class="hljs-keyword">import</span> org.springframework.cache.support.AbstractCacheManager;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-keyword">import</span> java.util.concurrent.ConcurrentHashMap;<br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span> 缓存代理类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CacheCreator</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> AbstractCacheManager cacheManager;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取缓存，如果获取不到创建一个</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> cacheInstance</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> values</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> Cache <span class="hljs-title function_">getCache</span><span class="hljs-params">(CacheInstance cacheInstance, List&lt;String&gt; values)</span> &#123;<br><br>        <span class="hljs-type">String</span> <span class="hljs-variable">cacheNameSuffix</span> <span class="hljs-operator">=</span> String.join(<span class="hljs-string">&quot;&amp;&quot;</span>, values);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">cacheName</span> <span class="hljs-operator">=</span> cacheInstance.name() + <span class="hljs-string">&quot;&amp;&quot;</span> + cacheNameSuffix;<br>        <span class="hljs-type">Cache</span> <span class="hljs-variable">cache</span> <span class="hljs-operator">=</span> cacheManager.getCache(cacheName);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> == cache) &#123;<br>            <span class="hljs-keyword">synchronized</span> (cacheName.intern()) &#123;<br>                cache = <span class="hljs-keyword">new</span> <span class="hljs-title class_">CaffeineCache</span>(cacheName, Caffeine.newBuilder()<br>                        .recordStats()<br>                        .expireAfterWrite(cacheInstance.getTtl(), TimeUnit.SECONDS)<br>                        .build());<br>                Map&lt;String, Cache&gt; caches = (ConcurrentHashMap&lt;String, Cache&gt;) ReflectUtil.getFieldValue(cacheManager, <span class="hljs-string">&quot;cacheMap&quot;</span>);<br>                caches.put(cacheName, cache);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> cache;<br>    &#125;<br><br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>我们还需要一个对业务数据进行区分的缓存枚举类，这些缓存配置将在缓存管理器初始化时加载：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> cn.hutool.core.util.RandomUtil;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span> 缓存实例</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">CacheInstance</span> &#123;<br>    <span class="hljs-comment">//枚举自行定义</span><br>    STUDENT_INFO,				<span class="hljs-comment">//学生信息</span><br>    CLASS_INFO(<span class="hljs-number">600</span>, <span class="hljs-number">1024</span>),		<span class="hljs-comment">//班级信息, 可自定义过期时间和最大数量</span><br>    ;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">ttl</span> <span class="hljs-operator">=</span> RandomUtil.randomInt(<span class="hljs-number">300</span>, <span class="hljs-number">360</span>);        <span class="hljs-comment">//默认过期时间  5分钟~6分钟</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">maxSize</span> <span class="hljs-operator">=</span> <span class="hljs-number">1024</span>;    <span class="hljs-comment">//最大數量</span><br><br>    CacheInstance() &#123;<br>    &#125;<br><br><br>    CacheInstance(<span class="hljs-type">int</span> ttl) &#123;<br>        <span class="hljs-built_in">this</span>.ttl = ttl;<br>    &#125;<br><br>    CacheInstance(<span class="hljs-type">int</span> ttl, <span class="hljs-type">int</span> maxSize) &#123;<br>        <span class="hljs-built_in">this</span>.ttl = ttl;<br>        <span class="hljs-built_in">this</span>.maxSize = maxSize;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMaxSize</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> maxSize;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setMaxSize</span><span class="hljs-params">(<span class="hljs-type">int</span> maxSize)</span> &#123;<br>        <span class="hljs-built_in">this</span>.maxSize = maxSize;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getTtl</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> ttl;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setTtl</span><span class="hljs-params">(<span class="hljs-type">int</span> ttl)</span> &#123;<br>        <span class="hljs-built_in">this</span>.ttl = ttl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-注解实现和工具类"><a href="#2-注解实现和工具类" class="headerlink" title="2.注解实现和工具类"></a>2.注解实现和工具类</h4><p>配置完了缓存，我们需要在业务上使用,我们可以通过切面注解的方式来实现缓存,这样可以大大减少业务代码和缓存代码的耦合性。</p>
+<ul>
+<li>缓存注解类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(ElementType.METHOD)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> Cacheable &#123;<br><br>    CacheInstance <span class="hljs-title function_">cacheName</span><span class="hljs-params">()</span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * cache缓存名拼接后缀的参数</span><br><span class="hljs-comment">     * 可填方法名或者针对这个方法独一无二的标识</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    String[] cacheNameSuffix() <span class="hljs-keyword">default</span> &#123;&#125;;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 缓存的键, 可以填入需要作为缓存依据的参数名,</span><br><span class="hljs-comment">     * 不写默认所有参数作为依据</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    String [] keys() <span class="hljs-keyword">default</span> &#123;&#125;;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>缓存删除注解</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(ElementType.METHOD)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-keyword">public</span> <span class="hljs-meta">@interface</span> CacheEvict &#123;<br><br>    CacheInstance[] cacheName() ;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * cache缓存名拼接后缀的参数，注意区分顺序</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     */</span><br>    String[] cacheNameSuffix() <span class="hljs-keyword">default</span> &#123;&#125;;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>缓存切面实现类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Around;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Aspect;<br><span class="hljs-keyword">import</span> org.aspectj.lang.reflect.CodeSignature;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.cache.Cache;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Component;<br><br><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.Map;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span> 缓存切面处理类</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-meta">@Aspect</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CacheAspectHandler</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> CacheCreator cacheCreator;<br><br>    <span class="hljs-comment">//缓存开启状态 也可以配置到配置文件中读取yml</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">Boolean</span> <span class="hljs-variable">enableCache</span> <span class="hljs-operator">=</span> Boolean.TRUE;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 获取缓存, 没有则添加缓存在返回</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> pjp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> cacheable</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> Throwable</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Around(&quot;@annotation(cacheable)&quot;)</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">cacheResponse</span><span class="hljs-params">(ProceedingJoinPoint pjp, Cacheable cacheable)</span> <span class="hljs-keyword">throws</span> Throwable &#123;<br>        Object result;<br><br>        <span class="hljs-keyword">if</span> (enableCache) &#123;<br>            <span class="hljs-comment">//获取参数</span><br>            String[] argNames = ((CodeSignature) pjp.getSignature()).getParameterNames();<br>            Object[] args = pjp.getArgs();<br>            <span class="hljs-comment">//生成参数键值对</span><br>            Map&lt;String, Object&gt; argMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; argNames.length; i++) &#123;<br>                argMap.put(argNames[i], args[i]);<br>            &#125;<br><br>            String key;<br>            <span class="hljs-keyword">if</span>(cacheable.keys().length != <span class="hljs-number">0</span>)&#123;<br>                key = CacheUtil.generateCacheKeyByMapAndSpecifiedKeys(argMap, cacheable.keys());<br>            &#125;<span class="hljs-keyword">else</span> &#123;<br>                key = CacheUtil.generateCacheKeyByMap(argMap);<br>            &#125;<br><br>            <span class="hljs-type">Cache</span> <span class="hljs-variable">cache</span> <span class="hljs-operator">=</span> cacheCreator.getCache(cacheable.cacheName(), Arrays.asList(cacheable.cacheNameSuffix()));<br>            result = cache.get(key, Object.class);<br>            <span class="hljs-keyword">if</span> (result != <span class="hljs-literal">null</span>) &#123;<br>                log.debug(String.format(<span class="hljs-string">&quot;命中缓存,实例：%s, 键：%s &quot;</span>, cache.getName(), key));<br><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                result = pjp.proceed();<br>                cache.put(key, result);<br>                log.debug(String.format(<span class="hljs-string">&quot;缓存成功,实例：%s, 键：%s &quot;</span>, cache.getName(), key));<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">//不开启缓存 直接过方法</span><br>            result = pjp.proceed();<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> result;<br><br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 删除缓存</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> pjp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> cacheEvict</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> Throwable</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Around(&quot;@annotation(cacheEvict)&quot;)</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">evictCacheResponse</span><span class="hljs-params">(ProceedingJoinPoint pjp, CacheEvict cacheEvict)</span> <span class="hljs-keyword">throws</span> Throwable &#123;<br><br>        CacheInstance[] cacheInstances = cacheEvict.cacheName();<br>        Arrays.stream(cacheInstances).forEach(cacheInstance -&gt; &#123;<br>            <span class="hljs-type">Cache</span> <span class="hljs-variable">cache</span> <span class="hljs-operator">=</span> cacheCreator.getCache(cacheInstance, Arrays.asList(cacheEvict.cacheNameSuffix()));<br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != cache) &#123;<br>                cache.clear();<br>                log.debug(String.format(<span class="hljs-string">&quot;清除缓存成功,实例：%s &quot;</span>, cache.getName()));<br>            &#125;<br>        &#125;);<br>        <span class="hljs-keyword">return</span> pjp.proceed();<br><br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用到的缓存工具类：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> cn.hutool.core.util.ArrayUtil;<br><span class="hljs-keyword">import</span> cn.hutool.json.JSONUtil;<br><span class="hljs-keyword">import</span> org.springframework.cache.Cache;<br><span class="hljs-keyword">import</span> org.springframework.cache.interceptor.SimpleKey;<br><br><span class="hljs-keyword">import</span> java.util.Arrays;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.List;<br><span class="hljs-keyword">import</span> java.util.Map;<br><span class="hljs-keyword">import</span> java.util.stream.Collectors;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Aunero</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span></span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CacheUtil</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;T&gt; T <span class="hljs-title function_">getValue</span><span class="hljs-params">(Cache cache, Object key, Class&lt;T&gt; returnClass)</span> &#123;<br>        <span class="hljs-keyword">if</span> (cache == <span class="hljs-literal">null</span> || key == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> cache.get(key, returnClass);<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">generateCacheKey</span><span class="hljs-params">(Object... keys)</span> &#123;<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleKey</span>(keys);<br>        List&lt;Object&gt; objects = Arrays.asList(keys);<br>        <span class="hljs-keyword">return</span> objects.stream().map(o -&gt; o == <span class="hljs-literal">null</span> ? <span class="hljs-string">&quot;null&quot;</span> : String.valueOf(o)).collect(Collectors.joining(<span class="hljs-string">&quot;&amp;&quot;</span>));<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">cacheValue</span><span class="hljs-params">(Cache cache, Object value, Object... keys)</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> == cache) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;内部错误：缓存器为空&quot;</span>);<br>        &#125;<br>        cache.put(generateCacheKey(keys), value);<br>    &#125;<br><br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">generateCacheKeyByMap</span><span class="hljs-params">(Map&lt;String, Object&gt; argMap)</span> &#123;<br>        <span class="hljs-comment">//直接将参数转为json作为缓存key</span><br>        <span class="hljs-keyword">return</span> JSONUtil.toJsonStr(argMap);<br><br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">generateCacheKeyByMapAndSpecifiedKeys</span><span class="hljs-params">(Map&lt;String, Object&gt; argMap, String... keys)</span> &#123;<br>        <span class="hljs-keyword">if</span> (ArrayUtil.isEmpty(keys)) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IllegalArgumentException</span>(<span class="hljs-string">&quot;请指定缓存的key&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">//将需要参数作为缓存key</span><br>        Map&lt;String, Object&gt; keysMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>        Arrays.stream(keys).forEach(key -&gt; keysMap.put(key, argMap.get(key)));<br>        <span class="hljs-keyword">return</span> generateCacheKeyByMap(keysMap);<br>    &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="3-缓存使用"><a href="#3-缓存使用" class="headerlink" title="3.缓存使用"></a>3.缓存使用</h4><ul>
+<li>添加缓存-情况1:将所有参数作为缓存key, 无需配置keys</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Cacheable(cacheName = CacheInstance.STUDENT_INFO,  //枚举类存放的缓存名</span><br><span class="hljs-meta">           cacheNameSuffix = &quot;selectStudentList&quot;)</span>	<span class="hljs-comment">//缓存前缀, 对这部分缓存的唯一标识, 这里可以使用方法名, 方便查找和删除</span><br><span class="hljs-keyword">public</span> Map <span class="hljs-title function_">selectStudentList</span><span class="hljs-params">(Student conditon, Clazz cls)</span>&#123;<br>    <span class="hljs-comment">//业务代码</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>添加缓存-情况2:部分参数作为缓存key, 配置keys</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Cacheable(cacheName = CacheInstance.STUDENT_INFO,  //枚举类存放的缓存名</span><br><span class="hljs-meta">           cacheNameSuffix = &quot;selectStudentList&quot;,	//缓存前缀, 对这部分缓存的唯一标识, 这里可以使用方法名, 方便查找和删除</span><br><span class="hljs-meta">           keys= &#123;&quot;conditon&quot;&#125;)</span>						<span class="hljs-comment">//只需要将参数condition作为缓存key</span><br><span class="hljs-keyword">public</span> Map <span class="hljs-title function_">selectStudentList</span><span class="hljs-params">(Student conditon, Clazz cls)</span>&#123;<br>    <span class="hljs-comment">//业务代码</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>缓存成功后，会打印缓存成功的日志，重复调用接口会打印命中缓存的日志，这时可以看到实例以及key</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-number">14</span>:<span class="hljs-number">51</span>:<span class="hljs-number">38.016</span> <span class="hljs-selector-attr">[http-nio-8097-exec-1]</span> DEBUG c<span class="hljs-selector-class">.k</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.CacheAspectHandler</span> - <span class="hljs-selector-attr">[cacheResponse,68]</span> - 缓存成功,实例：STUDENT_INFO&amp;selectStudentList, 键：&#123;<span class="hljs-string">&quot;conditon&quot;</span>:&#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;张&quot;</span>&#125;&#125; <br><span class="hljs-number">14</span>:<span class="hljs-number">51</span>:<span class="hljs-number">44.243</span> <span class="hljs-selector-attr">[http-nio-8097-exec-2]</span> DEBUG c<span class="hljs-selector-class">.k</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.CacheAspectHandler</span> - <span class="hljs-selector-attr">[cacheResponse,63]</span> - 命中缓存,实例：STUDENT_INFO&amp;selectStudentList, 键：&#123;<span class="hljs-string">&quot;conditon&quot;</span>:&#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;张&quot;</span>&#125;&#125; <br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>删除缓存</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@CacheEvict(cacheName = CacheInstance.STUDENT_INFO,  //枚举类存放的缓存名</span><br><span class="hljs-meta">           cacheNameSuffix = &quot;selectStudentList&quot;)</span>	<span class="hljs-comment">//缓存前缀, 清除该标识下的所有缓存</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">delCache</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-comment">//业务代码</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>清除缓存成功，则会打印清除成功日志</strong></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-number">14</span>:<span class="hljs-number">54</span>:<span class="hljs-number">43.911</span> <span class="hljs-selector-attr">[http-nio-8097-exec-5]</span> DEBUG c<span class="hljs-selector-class">.k</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.c</span><span class="hljs-selector-class">.CacheAspectHandler</span> - <span class="hljs-selector-attr">[lambda$evictCacheResponse$0,94]</span> - 清除缓存成功,实例：STUDENT_INFO&amp;selectStudentList<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上只展示了Caffeine缓存的基础应用，基本的缓存需求可以满足，当然也可以在切面中加入redis作为二级缓存使用。</p>
+<p>Caffeine缓存具有很好的性能和很强的扩展性，更多扩展用法可以参考Caffeine缓存的官方文档（<a target="_blank" rel="noopener" href="https://github.com/ben-manes/caffeine/wiki/Population-zh-CN">Population zh CN · ben-manes&#x2F;caffeine Wiki (github.com)</a>），若代码有错误或不足的地方可以评论回复。</p>
+<h4 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44427181/article/details/124817522">caffeine本地缓存的使用和详解_小曲同学呀的博客-CSDN博客_caffeine本地缓存</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java%E5%BC%80%E5%8F%91/" class="category-chain-item">Java开发</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+        <a href="/tags/Caffeine/">#Caffeine</a>
+      
+        <a href="/tags/%E7%BC%93%E5%AD%98/">#缓存</a>
+      
+        <a href="/tags/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B/">#面向切面编程</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Caffeine一级缓存介绍和应用</div>
+      <div>https://aunero.github.io/2022/09/caffeine-intro-and-apply.html</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>AuthurNero</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/Linux-firewall-cmd.html" title="Linux防火墙常用命令">
+                        <span class="hidden-mobile">Linux防火墙常用命令</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"ro8MInEicDhDKrPEBb47P9sP-9Nh9j0Va","appKey":"ZjYDvVDsoOj0GWscP4J1nU1T","path":"window.location.pathname","placeholder":"欢迎评论~无需登录~昵称栏输入QQ可自动获取昵称和头像哦~","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"https://ro8minei.lc-cn-e1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":true},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Powered by  <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> and <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":false},"rect":"opacity:0.7","log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
