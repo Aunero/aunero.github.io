@@ -19,7 +19,7 @@
     <meta name="description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker容器时间不同步导致在java应用中获取的时间不正确问题">
-<meta property="og:url" content="https://aunero.github.io/2022/06/docker-time-java-app.html">
+<meta property="og:url" content="https://blog.aunero.top/2022/06/docker-time-java-app.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
 <meta property="og:description" content="一、前言在把Java应用部署到docker容器时，发现应用获取到的时间和现实时间相差了8个小时，会导致一系列不必要的麻烦。 二、解决方案1、首选需要确保宿主机的时区和时间的准确在宿主机上用 date -R 看一下时区是否为东八区（末尾有+0800）  2、若宿主机时区或者时间不准确，可以用date&#x2F;ntpdate和tzdata同步一下时间以及更改时区date命令：123date">
 <meta property="og:locale" content="zh_CN">
@@ -27,8 +27,8 @@
 <meta property="article:published_time" content="2022-06-10T02:42:36.000Z">
 <meta property="article:modified_time" content="2022-08-09T03:19:43.038Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="Java">
 <meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Java">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/20220610114018.png">
@@ -73,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"aunero.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ro8MInEicDhDKrPEBb47P9sP-9Nh9j0Va","app_key":"ZjYDvVDsoOj0GWscP4J1nU1T","server_url":"https://ro8minei.lc-cn-e1-shared.com","path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"blog.aunero.top","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"ro8MInEicDhDKrPEBb47P9sP-9Nh9j0Va","app_key":"ZjYDvVDsoOj0GWscP4J1nU1T","server_url":"https://ro8minei.lc-cn-e1-shared.com","path":"window.location.pathname","ignore_local":"ture"}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -395,9 +395,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Java/">#Java</a>
-      
         <a href="/tags/Linux/">#Linux</a>
+      
+        <a href="/tags/Java/">#Java</a>
       
         <a href="/tags/docker/">#docker</a>
       
@@ -412,7 +412,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>docker容器时间不同步导致在java应用中获取的时间不正确问题</div>
-      <div>https://aunero.github.io/2022/06/docker-time-java-app.html</div>
+      <div>https://blog.aunero.top/2022/06/docker-time-java-app.html</div>
     </div>
     <div class="license-meta">
       
@@ -624,6 +624,17 @@
 </div>
 
   
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      浙ICP备2022028417号-1
+    </a>
+  </span>
+  
+</div>
+
   
   
 </div>
