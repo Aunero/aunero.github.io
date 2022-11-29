@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://aunero.github.io/2022/08/yum-install-docker.html</loc>
+    
+    <lastmod>2022-11-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://aunero.github.io/about/index.html</loc>
     
     <lastmod>2022-10-14</lastmod>
@@ -102,15 +111,6 @@
   
   <url>
     <loc>https://aunero.github.io/2022/06/docker-time-java-app.html</loc>
-    
-    <lastmod>2022-08-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://aunero.github.io/2022/08/yum-install-docker.html</loc>
     
     <lastmod>2022-08-09</lastmod>
     
