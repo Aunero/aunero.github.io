@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aunero.github.io/2022/05/sspanel-xrayr-tls-nginx-proxy.html</loc>
+    <lastmod>2023-01-09</lastmod>
+  </url>
+  <url>
     <loc>https://aunero.github.io/2022/12/java-es-querybuilder.html</loc>
     <lastmod>2022-12-28</lastmod>
   </url>
@@ -11,10 +15,6 @@
   <url>
     <loc>https://aunero.github.io/2022/08/yum-install-docker.html</loc>
     <lastmod>2022-11-29</lastmod>
-  </url>
-  <url>
-    <loc>https://aunero.github.io/2022/05/sspanel-xrayr-tls-nginx-proxy.html</loc>
-    <lastmod>2022-10-09</lastmod>
   </url>
   <url>
     <loc>https://aunero.github.io/2022/09/caffeine-intro-and-apply.html</loc>
