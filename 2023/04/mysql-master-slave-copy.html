@@ -16,28 +16,25 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 最近的网络最热门的，应该当ChatGPT所属了，在IT开发者界更是：有担忧的，有兴奋的，有求知的，一时兴起万层浪，但是，也有很多小白连最基本的大门都没办法进来，因为流量太大了，已远远超过了ChatGPT的服务器所承受能力，这个访问量已大大超出了你的想像，所以请了一台流量高防大将:CloudFlare，先是真人human验证，再是IP验证，很多新人都对Access denied&#x2F;Access">
+    <meta name="description" content="前言自己的网站前几天遭遇了cc攻击，才考虑到数据库及时备份的重要性，数据库更新比较频繁的情况下，每日定时备份可没办法应对突发情况，自然想到了主从复制，学着弄了下，正好也总结一下自己在生产环境操作的过程，以便日后再用。 主从复制机制实现原理： 正文一、前提 两台安装有mysql&#x2F;mariadb的服务器，一台为master，一台为slave。 主（master）机需要开放相应的数据库端口，默">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题">
-<meta property="og:url" content="https://aunero.github.io/2023/04/chatgpt-access-denied-use-warp.html">
+<meta property="og:title" content="MySQL&#x2F;MariaDB主从复制教程">
+<meta property="og:url" content="https://aunero.github.io/2023/04/mysql-master-slave-copy.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="前言 最近的网络最热门的，应该当ChatGPT所属了，在IT开发者界更是：有担忧的，有兴奋的，有求知的，一时兴起万层浪，但是，也有很多小白连最基本的大门都没办法进来，因为流量太大了，已远远超过了ChatGPT的服务器所承受能力，这个访问量已大大超出了你的想像，所以请了一台流量高防大将:CloudFlare，先是真人human验证，再是IP验证，很多新人都对Access denied&#x2F;Access">
+<meta property="og:description" content="前言自己的网站前几天遭遇了cc攻击，才考虑到数据库及时备份的重要性，数据库更新比较频繁的情况下，每日定时备份可没办法应对突发情况，自然想到了主从复制，学着弄了下，正好也总结一下自己在生产环境操作的过程，以便日后再用。 主从复制机制实现原理： 正文一、前提 两台安装有mysql&#x2F;mariadb的服务器，一台为master，一台为slave。 主（master）机需要开放相应的数据库端口，默">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111424706.png">
-<meta property="article:published_time" content="2023-04-11T03:48:04.000Z">
-<meta property="article:modified_time" content="2023-04-13T03:57:56.780Z">
+<meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304251703400.png">
+<meta property="article:published_time" content="2023-04-25T08:03:19.000Z">
+<meta property="article:modified_time" content="2023-04-25T09:04:10.649Z">
 <meta property="article:author" content="AuthurNero">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="xray">
-<meta property="article:tag" content="CloudFlare">
-<meta property="article:tag" content="Warp">
-<meta property="article:tag" content="ChatGPT">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="MariaDB">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111424706.png">
+<meta name="twitter:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304251703400.png">
   
   
   
-  <title>解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题 - Aunero&#39;s Blog</title>
+  <title>MySQL/MariaDB主从复制教程 - Aunero&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -256,7 +253,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题"></span>
+            <span id="subtitle" data-typed-text="MySQL/MariaDB主从复制教程"></span>
           
         </div>
 
@@ -267,8 +264,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-11 11:48" pubdate>
-          2023年4月11日 中午
+        <time datetime="2023-04-25 16:03" pubdate>
+          2023年4月25日 下午
         </time>
       </span>
     
@@ -280,7 +277,7 @@
         <i class="iconfont icon-chart"></i>
         
           <!-- compatible with older versions-->
-          2.4k 字
+          1.5k 字
         
       </span>
     
@@ -292,7 +289,7 @@
         
         
           <!-- compatible with older versions-->
-          20 分钟
+          13 分钟
         
       </span>
     
@@ -338,72 +335,54 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题</h1>
+            <h1 style="display: none">MySQL/MariaDB主从复制教程</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="前言">前言</h2>
-<p>最近的网络最热门的，应该当ChatGPT所属了，在IT开发者界更是：有担忧的，有兴奋的，有求知的，一时兴起万层浪，但是，也有很多小白连最基本的大门都没办法进来，因为流量太大了，已远远超过了ChatGPT的服务器所承受能力，这个访问量已大大超出了你的想像，所以请了一台流量高防大将:CloudFlare，先是真人human验证，再是IP验证，很多新人都对Access denied/Access denied Error code 1020深有体会吧，今天就聊一下如何彻底地解决这个问题。</p>
-<h2 id="思路">思路</h2>
-<p>由于CF验证IP，咱们大陆的IP会access denied拒绝，很多海外节点也被拒绝了，因为咱们国人多，热度高，流量大，所以第一排除的就是咱们中国及使用代理最多的中国IP。</p>
-<p>思路就是套用CloudFlare官方自己的Warp，它对自己人还是友好放行的原理。思路跟解锁Netfilx原生IP一样。</p>
-<h2 id="条件">条件</h2>
-<ul>
-<li>自己能配置的节点</li>
-<li>套的IP未被CF自己封</li>
+                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自己的网站前几天遭遇了cc攻击，才考虑到数据库及时备份的重要性，数据库更新比较频繁的情况下，每日定时备份可没办法应对突发情况，自然想到了主从复制，学着弄了下，正好也总结一下自己在生产环境操作的过程，以便日后再用。</p>
+<h4 id="主从复制机制实现原理："><a href="#主从复制机制实现原理：" class="headerlink" title="主从复制机制实现原理："></a>主从复制机制实现原理：</h4><p><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304251702505.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><h4 id="一、前提"><a href="#一、前提" class="headerlink" title="一、前提"></a>一、前提</h4><ul>
+<li>两台安装有mysql&#x2F;mariadb的服务器，一台为master，一台为slave。</li>
+<li>主（master）机需要开放相应的数据库端口，默认3306；</li>
+<li>主从复制，顾名思义从master机到slave机的单向同步，这点明白即可。</li>
 </ul>
-<h2 id="Warp">Warp</h2>
-<p>什么是Warp呢，请查看官方介绍吧</p>
-<p>官方地址：<a target="_blank" rel="noopener" href="https://1.1.1.1">https://1.1.1.1</a></p>
-<h2 id="安装">安装</h2>
-<h3 id="安装前">安装前</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl chat.openai.com<br></code></pre></td></tr></table></figure>
-<p>服务器直接进行curl，直接显示经典的error code:1020错误，说明我能服务器本身就无法访问ChatGPT，所以用它来作为节点，那肯定是不行的</p>
-<img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111200857.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
-<h3 id="直接通过浏览器访问">直接通过浏览器访问</h3>
-<center><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111158171.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></center>
-<h3 id="安装中">安装中</h3>
-<p>第一，先给服务上个快照，折腾坏了也能恢复折腾前的状态</p>
-<p>第二，安装warp 官网教程：<a target="_blank" rel="noopener" href="https://pkg.cloudflareclient.com/install">https://pkg.cloudflareclient.com/install</a></p>
-<p>1.为库安装GPG Key</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --<span class="hljs-built_in">yes</span> --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg<br></code></pre></td></tr></table></figure>
-<p>2.添加源到库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ <span class="hljs-subst">$(lsb_release -cs)</span> main&quot;</span> | sudo <span class="hljs-built_in">tee</span> /etc/apt/sources.list.d/cloudflare-client.list<br></code></pre></td></tr></table></figure>
-<p>3.update APT</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt update <span class="hljs-comment">#管理权限直接使用这个更新</span><br>sudo apt update <span class="hljs-comment">#如果不是管理员账号下，使用这个</span><br></code></pre></td></tr></table></figure>
-<p>4.安装Warp</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt install cloudflare-warp<br></code></pre></td></tr></table></figure>
-<p>5.注册Warp 运行命令给设备注册</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">warp-cli register<br></code></pre></td></tr></table></figure>
-<p>6.打开代理模式</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">warp-cli set-mode proxy<br></code></pre></td></tr></table></figure>
-<p>7.连接Warp</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">warp-cli connect<br></code></pre></td></tr></table></figure>
-<p>8.查验</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl ifconfig.me --proxy socks5://127.0.0.1:40000<br></code></pre></td></tr></table></figure>
-<img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111203279.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" />
-<p>显示IP地址为CloudFlare的代理IP地址了</p>
-<img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111233297.png" srcset="/img/loading.gif" lazyload alt="image-20230411123332269" style="zoom:67%;" />
-<p>再测试不使用socks5时候还是1020错误代码，第二条命令带上socks5,没有1020错误代码提示了。</p>
-<p>至此，说明我这能韩国服务器套上了CloudFlare的Warp节点，是能正常访问chat.openai.com了，接下来了就是配置节点的分流路由规则了</p>
-<h3 id="配置xray">配置xray</h3>
-<p>这一步会根据自己用的节点协议有所差异，我这里就用xray的配置方式来作为示例，其他的协议其实可以结合本文并参考官方文档配置。</p>
-<p>1.在&quot;outbounds&quot;的代码块添加出站规则，直接加在json格式的数组里即可</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;outbounds&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><br>    <span class="hljs-comment">//添加下面这个规则</span><br>    <span class="hljs-punctuation">&#123;</span><br>		<span class="hljs-attr">&quot;tag&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;chatGPT_proxy&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;protocol&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;socks&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;settings&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>			<span class="hljs-attr">&quot;servers&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>				<span class="hljs-punctuation">&#123;</span><br>					<span class="hljs-attr">&quot;address&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;127.0.0.1&quot;</span><span class="hljs-punctuation">,</span><br>					<span class="hljs-attr">&quot;port&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">40000</span><br>				<span class="hljs-punctuation">&#125;</span><br>			<span class="hljs-punctuation">]</span><br>		<span class="hljs-punctuation">&#125;</span><br>	<span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><br></code></pre></td></tr></table></figure>
-<p>2.在&quot;routing&quot;的代码块添加路由规则，<a target="_blank" rel="noopener" href="http://xn--chat-9s6fh5vu7gux9d.openai.xn--comip138-5w0n.com">使用域名chat.openai.com及ip138.com</a>(为了测试是否生效)的规则</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;routing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span>    <br>    <span class="hljs-attr">&quot;rules&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>        <span class="hljs-comment">//添加下面这个路由</span><br>        <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;field&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;outboundTag&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;chatGPT_proxy&quot;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;domain&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>                <span class="hljs-string">&quot;chat.openai.com&quot;</span><span class="hljs-punctuation">,</span><br>                <span class="hljs-string">&quot;ip138.com&quot;</span><br>            <span class="hljs-punctuation">]</span><br>        <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
-<p>3.重启xray服务</p>
-<h3 id="安装后">安装后</h3>
-<p>1.连接节点开启全局模式，<a target="_blank" rel="noopener" href="http://xn--ip138-qo0ll97o.com">测试ip138.com</a></p>
-<center><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111353569.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></center>
-<p>已经是cloudflare的IP地址了。地址和上“安装中——第8条”的：curl <a target="_blank" rel="noopener" href="http://ifconfig.me">ifconfig.me</a> --proxy socks5://127.0.0.1:40000结果是一致的</p>
-<p><a target="_blank" rel="noopener" href="http://2.xn--chat-9z2h93o.openai.com">2.打开chat.openai.com</a></p>
-<center><img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304111354902.png" srcset="/img/loading.gif" lazyload style="zoom:67%;" /></center>
-<p>访问成功，不再提示拒绝访问</p>
-<h2 id="总结">总结</h2>
-<p>方法是从解锁Netflix得到的启示，套了Warp就能解锁CloudFlare对你的节点的封锁了，而且现在CloudFlare拒绝访问的IP限制还不是很严格的，从而这个方法可以拯救你节点。</p>
-<p>总结思路：套用warp——设置域名分流规则</p>
+<h4 id="二、master机配置"><a href="#二、master机配置" class="headerlink" title="二、master机配置"></a>二、master机配置</h4><p>编辑mysql配置 <code>vim my.cnf</code> ，my.cnf位置自行确定，确保以下配置存在：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[mysqld]</span><br><span class="hljs-attr">log-bin</span>=mysql-bin   <span class="hljs-comment">#[必须]启用二进制日志</span><br><span class="hljs-attr">server-id</span>=<span class="hljs-number">1</span>         <span class="hljs-comment">#[必须]服务器唯一ID，默认是1</span><br></code></pre></td></tr></table></figure>
+
+<p>保存配置后重启mysql，通过ssh进入mysql命令行</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">mysql -uroot -p密码<br></code></pre></td></tr></table></figure>
+
+<p>新建slave用户，指定对应slave机ip和设置密码，并刷新权限，后面会用到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">GRANT REPLICATION slave ON *.* to &#x27;slave_user&#x27;@&#x27;slave机IP&#x27; identified by &#x27;自定义密码&#x27;;<br>flush privileges;<br></code></pre></td></tr></table></figure>
+
+<p>重启mysql后再次进入mysql命令行，查看master状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show master status;<br></code></pre></td></tr></table></figure>
+
+<p>看到File以及Position，说明bin-log是在运行的，记录其中的 <code>mysql-bin.00029</code> 和 <code>13925115</code> ，每个人的数据不一样</p>
+<img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304251633507.png" srcset="/img/loading.gif" lazyload style="zoom: 80%;" />
+
+<p><strong>这里有两个场景：</strong></p>
+<ul>
+<li>master机和slave机都是新机，没有任何数据，此时就可以跳过下面这一步</li>
+<li>我需要备份master机所有的数据库到slave，但是我的slave机刚搭建mysql，master机上有数据，这时候你就需要备份导出master机的数据库并还原到slave机，确保主从机数据的一致性，如果你的master机上的数据一直有变动（通过 <code>show master status;</code> 观察Position值），那么你需要<strong>确保备份导出前后Position值是一致的</strong>。这时候你可能需要采取<strong>锁全表</strong>操作，或者你想赌一把，能确保备份前后Position值不变也是可以的。</li>
+</ul>
+<h4 id="三、slave机配置"><a href="#三、slave机配置" class="headerlink" title="三、slave机配置"></a>三、slave机配置</h4><p>slave机也一样要配置my.ini</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[mysqld]</span><br><span class="hljs-attr">log-bin</span>=mysql-bin   <span class="hljs-comment">#[可选]启用二进制日志</span><br><span class="hljs-attr">server-id</span>=<span class="hljs-number">2</span>         <span class="hljs-comment">#id一定要比master机大</span><br></code></pre></td></tr></table></figure>
+
+<p>通过<code>mysql -uroot -p密码</code>进入mysql命令行，执行以下sql，把master机IP，上一步设置的mysql账号密码，记录的File值填入master_log_file，Position值填入master_log_pos：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">change master to master_host=&#x27;master机IP&#x27;,<br>master_user=&#x27;slave_user&#x27;,<br>master_password=&#x27;在master机上设置的自定义密码&#x27;,<br>master_log_file=&#x27;mysql-bin.00029&#x27;,<br>master_log_pos=13925115;<br></code></pre></td></tr></table></figure>
+
+<p>然后执行启动slave：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">start slave;<br></code></pre></td></tr></table></figure>
+
+<p>查看slave状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">show slave status;<br></code></pre></td></tr></table></figure>
+
+<p>Slave_IO_Running 和 Slave_SQL_Running 必须都为 Yes 才算成功：</p>
+<img src="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202304251658911.png" srcset="/img/loading.gif" lazyload alt="image-20230425165820864" style="zoom:67%;" />
+
+<h4 id="四、验证"><a href="#四、验证" class="headerlink" title="四、验证"></a>四、验证</h4><p>master数据库进行更新或删除操作之后，查看slave数据库是否同步即可。</p>
 
                 
               </div>
@@ -422,7 +401,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/VPN%E6%8A%80%E6%9C%AF/" class="category-chain-item">VPN技术</a>
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="category-chain-item">数据库</a>
   
   
 
@@ -437,15 +416,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/linux/">#linux</a>
+        <a href="/tags/MySQL/">#MySQL</a>
       
-        <a href="/tags/xray/">#xray</a>
-      
-        <a href="/tags/CloudFlare/">#CloudFlare</a>
-      
-        <a href="/tags/Warp/">#Warp</a>
-      
-        <a href="/tags/ChatGPT/">#ChatGPT</a>
+        <a href="/tags/MariaDB/">#MariaDB</a>
       
     </div>
   
@@ -457,8 +430,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题</div>
-      <div>https://aunero.github.io/2023/04/chatgpt-access-denied-use-warp.html</div>
+      <div>MySQL/MariaDB主从复制教程</div>
+      <div>https://aunero.github.io/2023/04/mysql-master-slave-copy.html</div>
     </div>
     <div class="license-meta">
       
@@ -470,7 +443,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年4月11日</div>
+          <div>2023年4月25日</div>
         </div>
       
       
@@ -502,18 +475,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/mysql-master-slave-copy.html" title="MySQL/MariaDB主从复制教程">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">MySQL/MariaDB主从复制教程</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/02/vps-v2ray-tor-ipproxy.html" title="在自己的VPS上利用v2ray+Tor打造代理IP池">
-                        <span class="hidden-mobile">在自己的VPS上利用v2ray+Tor打造代理IP池</span>
+                      <a href="/2023/04/chatgpt-access-denied-use-warp.html" title="解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题">
+                        <span class="hidden-mobile">解决ChatGPT使用节点访问被拒绝(access denied error code 1020)的问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
