@@ -16,16 +16,16 @@
   <meta name="author" content="AuthurNero">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器&#x2F;轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。 阿里云盾主要包括3个进程：AliYunDun、aliyun-service和AliYunDunUpdate。 教程1.可以先用以">
+    <meta name="description" content="前言 阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器&#x2F;轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。 阿里云盾主要包括3个进程：AliYunDun、aliyun-service和AliYunDunUpdate。 教程 1.可以先用以下命令">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阿里云服务器完全卸载云盾教程">
 <meta property="og:url" content="https://aunero.github.io/2023/09/uninstall-aliyun-shield.html">
 <meta property="og:site_name" content="Aunero&#39;s Blog">
-<meta property="og:description" content="前言阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器&#x2F;轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。 阿里云盾主要包括3个进程：AliYunDun、aliyun-service和AliYunDunUpdate。 教程1.可以先用以">
+<meta property="og:description" content="前言 阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器&#x2F;轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。 阿里云盾主要包括3个进程：AliYunDun、aliyun-service和AliYunDunUpdate。 教程 1.可以先用以下命令">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://aunero-blog.oss-cn-hangzhou.aliyuncs.com/img/202309161613155.png">
 <meta property="article:published_time" content="2023-09-16T08:01:40.746Z">
-<meta property="article:modified_time" content="2023-09-16T08:14:16.022Z">
+<meta property="article:modified_time" content="2023-09-18T08:19:50.055Z">
 <meta property="article:author" content="AuthurNero">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="Aliyun">
@@ -340,21 +340,25 @@
             
               <div class="markdown-body">
                 
-                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器&#x2F;轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。</p>
+                <h3 id="前言">前言</h3>
+<p>阿里云盾（AliYunDun），又名安骑士，是购买阿里云云产品后自带的监控云服务器/轻量应用服务器安全的产品，能够自动化实时入侵威胁检测、病毒查杀、漏洞智能修复、基线一键核查等功能，但是同时也会监控你的服务器是否有违规进程，然后就会收到“阿里云警告邮件”。</p>
 <p>阿里云盾主要包括3个进程：AliYunDun、aliyun-service和AliYunDunUpdate。</p>
-<h3 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h3><h4 id="1-可以先用以下命令查询一下是否有阿里云盾的进程"><a href="#1-可以先用以下命令查询一下是否有阿里云盾的进程" class="headerlink" title="1.可以先用以下命令查询一下是否有阿里云盾的进程"></a>1.可以先用以下命令查询一下是否有阿里云盾的进程</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">ps -aux | grep -E <span class="hljs-string">&#x27;aliyun|AliYunDun&#x27;</span><br></code></pre></td></tr></table></figure>
-
-<h4 id="2-确认存在进程，执行以下指令卸载云盾（官方脚本）"><a href="#2-确认存在进程，执行以下指令卸载云盾（官方脚本）" class="headerlink" title="2.确认存在进程，执行以下指令卸载云盾（官方脚本）"></a>2.确认存在进程，执行以下指令卸载云盾（官方脚本）</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sh">wget http://update.aegis.aliyun.com/download/uninstall.sh<br><span class="hljs-built_in">chmod</span> +x uninstall.sh<br>./uninstall.sh<br>wget http://update.aegis.aliyun.com/download/quartz_uninstall.sh<br><span class="hljs-built_in">chmod</span> +x quartz_uninstall.sh<br>./quartz_uninstall.sh<br></code></pre></td></tr></table></figure>
-
-<h4 id="3-卸载阿里云盾后，执行如下代码删除阿里云盾文件残留"><a href="#3-卸载阿里云盾后，执行如下代码删除阿里云盾文件残留" class="headerlink" title="3.卸载阿里云盾后，执行如下代码删除阿里云盾文件残留"></a>3.卸载阿里云盾后，执行如下代码删除阿里云盾文件残留</h4><blockquote>
+<h3 id="教程">教程</h3>
+<h4 id="1-可以先用以下命令查询一下是否有阿里云盾的进程">1.可以先用以下命令查询一下是否有阿里云盾的进程</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">ps -aux | grep -E <span class="hljs-string">&#x27;aliyun|AliYunDun&#x27;</span><br></code></pre></td></tr></table></figure>
+<h4 id="2-确认存在进程，执行以下指令卸载云盾（官方脚本）">2.确认存在进程，执行以下指令卸载云盾（官方脚本）</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs sh">wget http://update.aegis.aliyun.com/download/uninstall.sh<br><span class="hljs-built_in">chmod</span> +x uninstall.sh<br>./uninstall.sh<br>wget http://update.aegis.aliyun.com/download/quartz_uninstall.sh<br><span class="hljs-built_in">chmod</span> +x quartz_uninstall.sh<br>./quartz_uninstall.sh<br></code></pre></td></tr></table></figure>
+<h4 id="3-卸载阿里云盾后，执行如下代码删除阿里云盾文件残留">3.卸载阿里云盾后，执行如下代码删除阿里云盾文件残留</h4>
+<blockquote>
 <p>若有一些文件无法删除，可以先重启主机再执行</p>
 </blockquote>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sh">pkill aliyun-service<br><span class="hljs-built_in">rm</span> -rf /etc/init.d/agentwatch /usr/sbin/aliyun-service<br><span class="hljs-built_in">rm</span> -rf /usr/local/aegis*<br></code></pre></td></tr></table></figure>
-
-<h4 id="4-最后就是屏蔽阿里云盾的IP"><a href="#4-最后就是屏蔽阿里云盾的IP" class="headerlink" title="4.最后就是屏蔽阿里云盾的IP"></a>4.最后就是屏蔽阿里云盾的IP</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sh">iptables -I INPUT -s 140.205.201.0/28 -j DROP<br>iptables -I INPUT -s 140.205.201.16/29 -j DROP<br>iptables -I INPUT -s 140.205.201.32/28 -j DROP<br>iptables -I INPUT -s 140.205.225.192/29 -j DROP<br>iptables -I INPUT -s 140.205.225.200/30 -j DROP<br>iptables -I INPUT -s 140.205.225.184/29 -j DROP<br>iptables -I INPUT -s 140.205.225.183/32 -j DROP<br>iptables -I INPUT -s 140.205.225.206/32 -j DROP<br>iptables -I INPUT -s 140.205.225.205/32 -j DROP<br>iptables -I INPUT -s 140.205.225.195/32 -j DROP<br>iptables -I INPUT -s 140.205.225.204/32 -j DROP<br></code></pre></td></tr></table></figure>
-
-<h4 id="5-检查阿里云盾是否卸载干净"><a href="#5-检查阿里云盾是否卸载干净" class="headerlink" title="5.检查阿里云盾是否卸载干净"></a>5.检查阿里云盾是否卸载干净</h4><p>最后检查下自己服务器上的阿里云盾是否卸载干净了，主要就是看进程里有没有阿里云盾的相关进程了（AliYunDun、aliyun-service和AliYunDunUpdate），可以通过<code>ps -aux | grep -E &#39;aliyun|AliYunDun&#39;</code>来检查，如果没有相关进程则说明阿里云盾已经卸载干净了。</p>
-<h4 id="参考文章："><a href="#参考文章：" class="headerlink" title="参考文章："></a>参考文章：</h4><p><a target="_blank" rel="noopener" href="https://www.vpsgo.com/uninstall-aliyundun.html">阿里云如何完全卸载阿里云盾（安骑士）并屏蔽阿里云盾IP - VPS GO</a></p>
+<h4 id="4-最后就是屏蔽阿里云盾的IP">4.最后就是屏蔽阿里云盾的IP</h4>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sh">iptables -I INPUT -s 140.205.201.0/28 -j DROP<br>iptables -I INPUT -s 140.205.201.16/29 -j DROP<br>iptables -I INPUT -s 140.205.201.32/28 -j DROP<br>iptables -I INPUT -s 140.205.225.192/29 -j DROP<br>iptables -I INPUT -s 140.205.225.200/30 -j DROP<br>iptables -I INPUT -s 140.205.225.184/29 -j DROP<br>iptables -I INPUT -s 140.205.225.183/32 -j DROP<br>iptables -I INPUT -s 140.205.225.206/32 -j DROP<br>iptables -I INPUT -s 140.205.225.205/32 -j DROP<br>iptables -I INPUT -s 140.205.225.195/32 -j DROP<br>iptables -I INPUT -s 140.205.225.204/32 -j DROP<br></code></pre></td></tr></table></figure>
+<h4 id="5-检查阿里云盾是否卸载干净">5.检查阿里云盾是否卸载干净</h4>
+<p>最后检查下自己服务器上的阿里云盾是否卸载干净了，主要就是看进程里有没有阿里云盾的相关进程了（AliYunDun、aliyun-service和AliYunDunUpdate），可以通过<code>ps -aux | grep -E 'aliyun|AliYunDun'</code>来检查，如果没有相关进程则说明阿里云盾已经卸载干净了。</p>
+<h4 id="参考文章：">参考文章：</h4>
+<p><a target="_blank" rel="noopener" href="https://www.vpsgo.com/uninstall-aliyundun.html">阿里云如何完全卸载阿里云盾（安骑士）并屏蔽阿里云盾IP - VPS GO</a></p>
 
                 
               </div>
@@ -373,7 +377,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Java%E5%BC%80%E5%8F%91/" class="category-chain-item">Java开发</a>
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
   
   
 
