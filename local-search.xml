@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>让多个域名都可以访问一个wordpress网站</title>
+    <link href="/2024/08/mult-domain-wordpress.html"/>
+    <url>/2024/08/mult-domain-wordpress.html</url>
+    
+    <content type="html"><![CDATA[<h4 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h4><p>WordPress在安装后会默认绑定当前的域名，如果把多个域名都绑定到wordpress网站后，在通过这些域名访问时，还是会跳转到安装时候的域名。</p><p>有没有什么办法可以，让各自域名，访问这个wordpress网站，都显示的是当前访问的域名呢?</p><p>简站wordpress主题，今天给大家分享一个WordPress可以绑定多个域名并通过这些域名都能访问网站的方法。</p><h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>打开网站根目录下的wp-config.php，找到define(‘WP_DEBUG’, false); 在后面添加下面内容：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;WP_SITEURL&#x27;</span>, <span class="hljs-string">&#x27;http://&#x27;</span> . <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_HOST&#x27;</span>]);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;WP_HOME&#x27;</span>, <span class="hljs-string">&#x27;http://&#x27;</span> . <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_HOST&#x27;</span>]);<br></code></pre></td></tr></table></figure><p>这样的话，所有绑定到了这个网站的域名都可以访问。</p><p>如果只想让限定的域名访问，只需要添加以下的代码：</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-variable">$domain</span> = <span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;www.a.com&quot;</span>, <span class="hljs-string">&quot;www.b.com&quot;</span>, <span class="hljs-string">&quot;www.c.com&quot;</span>); <br><span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">in_array</span>(<span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_HOST&#x27;</span>], <span class="hljs-variable">$domain</span>))&#123;<br>    <span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;WP_SITEURL&#x27;</span>, <span class="hljs-string">&#x27;http://&#x27;</span> . <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_HOST&#x27;</span>]);<br>    <span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&#x27;WP_HOME&#x27;</span>, <span class="hljs-string">&#x27;http://&#x27;</span> . <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&#x27;HTTP_HOST&#x27;</span>]);<br>&#125;<br></code></pre></td></tr></table></figure><h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><ol><li><p>如果是https，请修改代码里面的http:&#x2F;&#x2F;为https:&#x2F;&#x2F;;</p></li><li><p>如果网站安装在二级目录，则将</p></li></ol><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-string">&quot;http://&quot;</span>. <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&quot;HTTP_HOST&quot;</span>]<br></code></pre></td></tr></table></figure><p>修改为</p><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-string">&quot;http://&quot;</span> . <span class="hljs-variable">$_SERVER</span>[<span class="hljs-string">&quot;HTTP_HOST&quot;</span>].<span class="hljs-string">&quot;/对应目录名&quot;</span><br></code></pre></td></tr></table></figure><ol start="3"><li><p>完成这些操作后，网站已经可以实现多域名访问了。</p></li><li><p>但是有个问题，是在启用伪静态后，图片链接是固定的，还没有变化。再需要把以下代码添加进去，才能实现图片链接也改为静态链接。</p></li></ol><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">define</span>( <span class="hljs-string">&#x27;WP_CONTENT_URL&#x27;</span>, <span class="hljs-string">&#x27;/wp-content&#x27;</span>);<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>建站</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>wordpress</tag>
+      
+      <tag>建站</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>阿里云服务器完全卸载云盾教程</title>
     <link href="/2023/09/uninstall-aliyun-shield.html"/>
     <url>/2023/09/uninstall-aliyun-shield.html</url>
